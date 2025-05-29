@@ -1,6 +1,6 @@
 {
   "name": "mood-journal",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Mood Journal monorepo... yee-haw.",
   "main": "index.js",
   "author": "Anthony Pogliano",
@@ -10,6 +10,9 @@
     "./packages/client",
     "./packages/server"
   ],
+  "scripts": {
+    "start:dev": "yarn workspace react-client dev & yarn workspace trpc-server start:dev"
+  },
   "keywords": [
     "ExpressJS",
     "React",
