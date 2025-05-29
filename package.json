@@ -1,0 +1,9 @@
+{
+  "name": "mood-journal",
+  "version": "1.0.0",
+  "description": "Mood Journal monorepo... yee-haw.",
+  "main": "index.js",
+  "author": "Anthony Pogliano",
+  "license": "MIT",
+  "private": false
+}
