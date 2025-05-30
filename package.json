@@ -10,6 +10,9 @@
     "./packages/client",
     "./packages/server"
   ],
+  "engines": {
+    "node": "22.12.0"
+  },
   "scripts": {
     "start:dev": "yarn workspace react-client dev & yarn workspace trpc-server start:dev"
   },
