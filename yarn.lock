@@ -563,6 +563,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@radix-ui/react-compose-refs@npm:1.1.2":
+  version: 1.1.2
+  resolution: "@radix-ui/react-compose-refs@npm:1.1.2"
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/d36a9c589eb75d634b9b139c80f916aadaf8a68a7c1c4b8c6c6b88755af1a92f2e343457042089f04cc3f23073619d08bb65419ced1402e9d4e299576d970771
+  languageName: node
+  linkType: hard
+
+"@radix-ui/react-slot@npm:^1.2.3":
+  version: 1.2.3
+  resolution: "@radix-ui/react-slot@npm:1.2.3"
+  dependencies:
+    "@radix-ui/react-compose-refs": "npm:1.1.2"
+  peerDependencies:
+    "@types/react": "*"
+    react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 10c0/5913aa0d760f505905779515e4b1f0f71a422350f077cc8d26d1aafe53c97f177fec0e6d7fbbb50d8b5e498aa9df9f707ca75ae3801540c283b26b0136138eef
+  languageName: node
+  linkType: hard
+
 "@rolldown/pluginutils@npm:1.0.0-beta.9":
   version: 1.0.0-beta.9
   resolution: "@rolldown/pluginutils@npm:1.0.0-beta.9"
@@ -1023,6 +1051,25 @@ __metadata:
   peerDependencies:
     react: ^18 || ^19
   checksum: 10c0/f1d440075b7f8e7738cd4f26a87a089c0efaf282e633cfb9db249ef20068d5f4f14c9d990a304b96df183bffc8839ee579853fef212c213510c425b8092630be
+  languageName: node
+  linkType: hard
+
+"@tanstack/react-table@npm:^8.21.3":
+  version: 8.21.3
+  resolution: "@tanstack/react-table@npm:8.21.3"
+  dependencies:
+    "@tanstack/table-core": "npm:8.21.3"
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 10c0/85d1d0fcb690ecc011f68a5a61c96f82142e31a0270dcf9cbc699a6f36715b1653fe6ff1518302a6d08b7093351fc4cabefd055a7db3cd8ac01e068956b0f944
+  languageName: node
+  linkType: hard
+
+"@tanstack/table-core@npm:8.21.3":
+  version: 8.21.3
+  resolution: "@tanstack/table-core@npm:8.21.3"
+  checksum: 10c0/40e3560e6d55e07cc047024aa7f83bd47a9323d21920d4adabba8071fd2d21230c48460b26cedf392588f8265b9edc133abb1b0d6d0adf4dae0970032900a8c9
   languageName: node
   linkType: hard
 
@@ -1610,6 +1657,22 @@ __metadata:
   version: 3.0.0
   resolution: "chownr@npm:3.0.0"
   checksum: 10c0/43925b87700f7e3893296c8e9c56cc58f926411cce3a6e5898136daaf08f08b9a8eb76d37d3267e707d0dcc17aed2e2ebdf5848c0c3ce95cf910a919935c1b10
+  languageName: node
+  linkType: hard
+
+"class-variance-authority@npm:^0.7.1":
+  version: 0.7.1
+  resolution: "class-variance-authority@npm:0.7.1"
+  dependencies:
+    clsx: "npm:^2.1.1"
+  checksum: 10c0/0f438cea22131808b99272de0fa933c2532d5659773bfec0c583de7b3f038378996d3350683426b8e9c74a6286699382106d71fbec52f0dd5fbb191792cccb5b
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^2.1.1":
+  version: 2.1.1
+  resolution: "clsx@npm:2.1.1"
+  checksum: 10c0/c4c8eb865f8c82baab07e71bfa8897c73454881c4f99d6bc81585aecd7c441746c1399d08363dc096c550cceaf97bd4ce1e8854e1771e9998d9f94c4fe075839
   languageName: node
   linkType: hard
 
@@ -2797,6 +2860,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"lucide-react@npm:^0.514.0":
+  version: 0.514.0
+  resolution: "lucide-react@npm:0.514.0"
+  peerDependencies:
+    react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+  checksum: 10c0/83d781e5036b53a1b0f3be05d43c80675c8d65ff59901f7db1868ba36d3fa159cb459f4c3974781a4105062a1aa7df8a57ac70192a455b95afec7281ad751ffb
+  languageName: node
+  linkType: hard
+
 "magic-string@npm:^0.30.17":
   version: 0.30.17
   resolution: "magic-string@npm:0.30.17"
@@ -3311,21 +3383,28 @@ __metadata:
   resolution: "react-client@workspace:packages/client"
   dependencies:
     "@eslint/js": "npm:^9.25.0"
+    "@radix-ui/react-slot": "npm:^1.2.3"
     "@tailwindcss/vite": "npm:^4.1.8"
     "@tanstack/react-query": "npm:^5.79.0"
+    "@tanstack/react-table": "npm:^8.21.3"
     "@trpc/client": "npm:^11.1.4"
     "@trpc/tanstack-react-query": "npm:^11.1.4"
     "@types/react": "npm:^19.1.2"
     "@types/react-dom": "npm:^19.1.2"
     "@vitejs/plugin-react-swc": "npm:^3.9.0"
+    class-variance-authority: "npm:^0.7.1"
+    clsx: "npm:^2.1.1"
     eslint: "npm:^9.25.0"
     eslint-plugin-react-hooks: "npm:^5.2.0"
     eslint-plugin-react-refresh: "npm:^0.4.19"
     globals: "npm:^16.0.0"
+    lucide-react: "npm:^0.514.0"
     react: "npm:^19.1.0"
     react-dom: "npm:^19.1.0"
+    tailwind-merge: "npm:^3.3.1"
     tailwindcss: "npm:^4.1.8"
     trpc-server: "workspace:packages/server"
+    tw-animate-css: "npm:^1.3.4"
     typescript: "npm:~5.8.3"
     typescript-eslint: "npm:^8.30.1"
     vite: "npm:^6.3.5"
@@ -3730,6 +3809,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tailwind-merge@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "tailwind-merge@npm:3.3.1"
+  checksum: 10c0/b84c6a78d4669fa12bf5ab8f0cdc4400a3ce0a7c006511af4af4be70bb664a27466dbe13ee9e3b31f50ddf6c51d380e8192ce0ec9effce23ca729d71a9f63818
+  languageName: node
+  linkType: hard
+
 "tailwindcss@npm:4.1.8, tailwindcss@npm:^4.1.8":
   version: 4.1.8
   resolution: "tailwindcss@npm:4.1.8"
@@ -3870,6 +3956,13 @@ __metadata:
   bin:
     tsx: dist/cli.mjs
   checksum: 10c0/f7b8d44362343fbde1f2ecc9832d243a450e1168dd09702a545ebe5f699aa6912e45b431a54b885466db414cceda48e5067b36d182027c43b2c02a4f99d8721e
+  languageName: node
+  linkType: hard
+
+"tw-animate-css@npm:^1.3.4":
+  version: 1.3.4
+  resolution: "tw-animate-css@npm:1.3.4"
+  checksum: 10c0/fc17e27684351ee151dd0bcef848ef72d1ec4bce6769ece079f30ac8a481c52a6c9d523f7ecd55ef73adc4b7375fdc7a46bb2598335fb06d86d0bc65a6c3e37b
   languageName: node
   linkType: hard
 
