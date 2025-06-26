@@ -23,4 +23,19 @@ export const UserRouter = trpc.router({
         },
       })
     }),
+  deleteUser: trpc.procedure
+    .input(
+      z.object({
+        id: z.coerce.number().int(),
+      })
+    )
+    .mutation(async (opts) => {
+      const { id } = opts.input
+
+      return await prisma.user.delete({
+        where: {
+          id: id,
+        },
+      })
+    }),
 })
