@@ -8,6 +8,11 @@ export const columns: ColumnDef<CreateUserOutput>[] = [
   { accessorKey: 'lastName', header: 'Last Name' },
   { accessorKey: 'email', header: 'Email' },
   {
+    accessorKey: 'password',
+    header: 'Password',
+    maxSize: 150,
+  },
+  {
     accessorKey: 'actions',
     header: 'Actions',
     cell: ({ row }) => {

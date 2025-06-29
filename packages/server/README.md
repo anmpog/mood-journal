@@ -25,3 +25,7 @@ I opted to use the pattern of having multiple `.env` files. This requires relian
 ```
 
 This script loads environment variables defined in a file called `.env.sample`. This should allow any pre-runtime scripts(like `prisma migrate`) access to environment variables.
+
+# Password Security
+
+Passwords are hashed on the server using the Argon2id hashing algorithm.

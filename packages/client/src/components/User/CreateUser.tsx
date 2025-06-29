@@ -8,6 +8,7 @@ export default function CreateUser() {
     firstName: '',
     lastName: '',
     email: '',
+    password: '',
   }
   const [formState, setFormState] = useState<CreateUserInput>(initialFormState)
 
@@ -68,6 +69,15 @@ export default function CreateUser() {
           name='email'
           id='email'
           value={formState['email']}
+          onChange={handleChange}
+          required
+        />
+        <label htmlFor='password'>Password:</label>
+        <input
+          type='password'
+          name='password'
+          id='password'
+          value={formState['password']}
           onChange={handleChange}
           required
         />
