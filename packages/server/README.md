@@ -28,4 +28,6 @@ This script loads environment variables defined in a file called `.env.sample`. 
 
 # Password Security
 
-Passwords are hashed on the server using the Argon2id hashing algorithm.
+Passwords are hashed on the server using the Argon2id hashing algorithm. I used the following [guidelines/settings](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#introduction) to configure the Argon2id implementation I used. At the time I built this part of the code the recommendation from OWASP was:
+
+> Use Argon2id with a minimum configuration of 19 MiB of memory, an iteration count of 2, and 1 degree of parallelism.
