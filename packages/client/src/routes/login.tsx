@@ -1,19 +1,21 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState, type ChangeEvent } from 'react'
 import { Button } from '@/components/ui/button'
-import useLoginUserMutation from '@/components/User/hooks/useLoginUser'
 import type { LoginUserInput } from '@/components/User/hooks/useLoginUser'
+import { useAuth } from '@/auth/useAuth'
 
 export const Route = createFileRoute('/login')({
-  component: Login,
+  component: LoginComponent,
 })
 
-function Login() {
-  const initialFormState = {
+function LoginComponent() {
+  const auth = useAuth()
+  const navigate = useNavigate({ from: '/login' })
+
+  const [formState, setFormState] = useState<LoginUserInput>({
     email: '',
     password: '',
-  }
-  const [formState, setFormState] = useState<LoginUserInput>(initialFormState)
+  })
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const name = event.target.name as keyof typeof formState
@@ -25,27 +27,31 @@ function Login() {
     }
   }
 
-  const { mutate: loginUserMutation } = useLoginUserMutation()
+  // const handleFormReset = (): void => {
+  //   setFormState({ email: '', password: '' })
+  // }
 
-  const handleFormReset = (): void => {
-    setFormState(initialFormState)
+  const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    try {
+      const response = await auth.login({ ...formState })
+
+      if (response) {
+        navigate({ to: '/profile' })
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error(error.message)
+      } else {
+        throw new Error('There was an error logging in.')
+      }
+    } finally {
+      console.log('Finally')
+    }
   }
 
   return (
-    <form
-      onSubmit={(event) => {
-        event.preventDefault()
-        loginUserMutation(
-          {
-            ...formState,
-          },
-          {
-            onSuccess: handleFormReset,
-          }
-        )
-      }}
-      className='flex flex-col'
-    >
+    <form onSubmit={onFormSubmit} className='flex flex-col'>
       <label htmlFor='email'>Email:</label>
       <input
         type='email'
