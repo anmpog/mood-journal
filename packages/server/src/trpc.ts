@@ -1,6 +1,7 @@
-import { initTRPC } from '@trpc/server'
+import { initTRPC, TRPCError } from '@trpc/server'
 import * as trpcExpress from '@trpc/server/adapters/express'
 import { prisma } from './prisma'
+import { verifyJwt } from './utils/jwt'
 
 // Expand this to add session
 interface CreateInnerContextOptions
@@ -8,6 +9,7 @@ interface CreateInnerContextOptions
   session?: {}
 }
 
+// Inner context to make DB connection readily available to procedures
 export async function createContextInner(opts?: CreateInnerContextOptions) {
   return {
     prisma,
@@ -15,6 +17,7 @@ export async function createContextInner(opts?: CreateInnerContextOptions) {
   }
 }
 
+// Outer context
 export async function createContext(
   opts: trpcExpress.CreateExpressContextOptions
 ) {
@@ -28,6 +31,28 @@ export async function createContext(
 }
 
 // Docs say to infer type of inner context since it's always available
-type Context = Awaited<ReturnType<typeof createContextInner>>
+type Context = Awaited<ReturnType<typeof createContext>>
 
-export const trpc = initTRPC.context<Context>().create()
+export const t = initTRPC.context<Context>().create()
+
+export const publicProcedure = t.procedure
+export const router = t.router
+
+// Testing middleware for understanding
+export const authedProcedure = t.procedure.use(async (opts) => {
+  console.log('Authed Procedure Middleware')
+  console.log('Headers: ', opts.ctx.req.headers)
+
+  const token = opts.ctx.req.headers.authorization?.split(' ')[1]
+  console.log('Token on its own: ', token)
+  if (!token) {
+    throw new TRPCError({
+      message: 'Please authenticate.',
+      code: 'UNAUTHORIZED',
+    })
+  }
+
+  verifyJwt(token)
+
+  return opts.next()
+})

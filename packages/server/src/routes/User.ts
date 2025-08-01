@@ -1,6 +1,8 @@
-import { trpc } from '../trpc'
+import { authedProcedure, publicProcedure, router } from '../trpc'
 import { z } from 'zod'
 import { argon2id, hash, verify } from 'argon2'
+import { TRPCError } from '@trpc/server'
+import { signJwt } from '../utils/jwt'
 
 // Argon2 options
 const encryptionSettings = {
@@ -10,16 +12,33 @@ const encryptionSettings = {
   parallelism: 1,
 }
 
-export const UserRouter = trpc.router({
-  getAllUsers: trpc.procedure.query(async ({ ctx }) => {
+// Experimenting with my own response types
+export type SuccessResponse<T> = { success: true; data: T }
+export type FailureResponse = { success: false; message: string }
+
+export function Success<T>(data: T): SuccessResponse<T> {
+  return { success: true, data }
+}
+
+export function Failure(message: string): FailureResponse {
+  return { success: false, message }
+}
+
+export const UserRouter = router({
+  getAllUsers: publicProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.user.findMany()
   }),
-  createUser: trpc.procedure
+  createUser: publicProcedure
     .input(
       z.object({
-        firstName: z.string(),
-        lastName: z.string(),
-        email: z.string(),
+        firstName: z.string().trim(),
+        lastName: z.string().trim(),
+        email: z
+          .string()
+          .email({
+            message: 'Please provide a propertly formatted email address.',
+          })
+          .trim(),
         password: z
           .string()
           .min(8, { message: 'Password must be longer than 8 characters.' })
@@ -29,18 +48,31 @@ export const UserRouter = trpc.router({
     .mutation(async ({ input, ctx }) => {
       const { firstName, lastName, email, password } = input
 
-      const hashedPw = await hash(password, encryptionSettings)
-
-      return await ctx.prisma.user.create({
-        data: {
-          firstName,
-          lastName,
+      const existingUser = await ctx.prisma.user.findUnique({
+        where: {
           email,
-          password: hashedPw,
         },
       })
+
+      if (existingUser) {
+        throw new TRPCError({
+          code: 'CONFLICT',
+          message: 'User already exists.',
+        })
+      } else if (!existingUser) {
+        const hashedPw = await hash(password, encryptionSettings)
+
+        return await ctx.prisma.user.create({
+          data: {
+            firstName,
+            lastName,
+            email,
+            password: hashedPw,
+          },
+        })
+      }
     }),
-  deleteUser: trpc.procedure
+  deleteUser: publicProcedure
     .input(
       z.object({
         id: z.coerce.number().int(),
@@ -55,7 +87,7 @@ export const UserRouter = trpc.router({
         },
       })
     }),
-  loginUser: trpc.procedure
+  loginUser: publicProcedure
     .input(
       z.object({
         email: z.string(),
@@ -67,34 +99,55 @@ export const UserRouter = trpc.router({
     )
     .mutation(async ({ input, ctx }) => {
       const { email: providedEmail, password: providedPassword } = input
-      console.log('Email: ', providedEmail)
-      console.log('Password: ', providedPassword)
 
-      try {
-        const user = await ctx.prisma.user.findUnique({
-          where: {
-            email: providedEmail,
-          },
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          email: providedEmail,
+        },
+      })
+
+      if (!user) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Username or password is incorrect.',
         })
-
-        if (!user) {
-          return { message: 'Could not find a user with those credentials.' }
-        } else if (user) {
-          const passwordMatches: boolean = await verify(
-            user.password,
-            providedPassword
-          )
-
-          if (!passwordMatches) {
-            return { message: 'Password did not match' }
-          } else if (passwordMatches) {
-            return { message: 'Password matched' }
-          }
-        }
-      } catch (error) {
-        console.log('There was some sort of crazy shit happening on the server')
       }
 
-      return null
+      const passwordMatches: boolean = await verify(
+        user.password,
+        providedPassword
+      )
+
+      if (!passwordMatches) {
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'Username or password is incorrect.',
+        })
+      }
+      const payload = {
+        userId: user.id,
+        email: user.email,
+      }
+
+      const token = signJwt(payload)
+
+      return Success(token)
+    }),
+  getUserProfile: authedProcedure
+    .input(z.object({ userId: z.number().int() }))
+    .query(async ({ input, ctx }) => {
+      const { userId } = input
+
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: userId },
+      })
+
+      if (!user) {
+        throw new TRPCError({ code: 'NOT_FOUND' })
+      }
+
+      const { firstName, lastName } = user
+
+      return Success({ firstName, lastName })
     }),
 })

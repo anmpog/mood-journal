@@ -4,11 +4,14 @@ import { useAuth } from './auth/useAuth.tsx'
 import { AuthProvider } from './AuthProvider.tsx'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { queryClient } from './utils/trpc.ts'
+import { trpc } from './utils/trpc.ts'
 
 const router = createRouter({
   routeTree,
   context: {
     auth: undefined!,
+    queryClient,
+    trpc,
   },
 })
 
