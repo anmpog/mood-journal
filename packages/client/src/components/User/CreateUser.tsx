@@ -1,6 +1,6 @@
+import type { CreateUserInput } from '@/mutations/useCreateUser'
+import useCreateUser from '@/mutations/useCreateUser'
 import { useState, type ChangeEvent } from 'react'
-import { type CreateUserInput } from './hooks/useCreateUser'
-import useCreateUserMutation from './hooks/useCreateUser'
 import { Button } from '../ui/button'
 
 export default function CreateUser() {
@@ -22,7 +22,7 @@ export default function CreateUser() {
     }
   }
 
-  const { mutate: createUserMutation } = useCreateUserMutation()
+  const { mutate: createUserMutation } = useCreateUser()
 
   const handleFormReset = (): void => {
     setFormState(initialFormState)

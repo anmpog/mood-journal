@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState, type ChangeEvent } from 'react'
 import { Button } from '@/components/ui/button'
-import type { LoginUserInput } from '@/components/User/hooks/useLoginUser'
+import type { LoginUserInput } from '@/mutations/useLoginUser'
 import { useAuth } from '@/auth/useAuth'
 
 export const Route = createFileRoute('/login')({
@@ -27,17 +27,13 @@ function LoginComponent() {
     }
   }
 
-  // const handleFormReset = (): void => {
-  //   setFormState({ email: '', password: '' })
-  // }
-
   const onFormSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     try {
       const response = await auth.login({ ...formState })
 
       if (response) {
-        navigate({ to: '/profile' })
+        navigate({ to: `/profile` })
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -45,13 +41,14 @@ function LoginComponent() {
       } else {
         throw new Error('There was an error logging in.')
       }
-    } finally {
-      console.log('Finally')
     }
   }
 
   return (
-    <form onSubmit={onFormSubmit} className='flex flex-col'>
+    <form
+      onSubmit={onFormSubmit}
+      className='flex flex-col w-1/2 mx-auto border-1 py-6 px-4 gap-3'
+    >
       <label htmlFor='email'>Email:</label>
       <input
         type='email'
@@ -70,7 +67,7 @@ function LoginComponent() {
         onChange={handleChange}
         required
       />
-      <Button type='submit' variant={'default'}>
+      <Button type='submit' variant='default'>
         Login
       </Button>
     </form>
