@@ -3,6 +3,7 @@ import { useState, type ChangeEvent } from 'react'
 import { Button } from '@/components/ui/button'
 import type { LoginUserInput } from '@/mutations/useLoginUser'
 import { useAuth } from '@/auth/useAuth'
+import { Input } from '@/components/ui/input'
 
 export const Route = createFileRoute('/login')({
   component: LoginComponent,
@@ -50,7 +51,7 @@ function LoginComponent() {
       className='flex flex-col w-1/2 mx-auto border-1 py-6 px-4 gap-3'
     >
       <label htmlFor='email'>Email:</label>
-      <input
+      <Input
         type='email'
         name='email'
         id='email'
@@ -58,8 +59,10 @@ function LoginComponent() {
         onChange={handleChange}
         required
       />
-      <label htmlFor='password'>Password:</label>
-      <input
+      <label htmlFor='password' className='mt-[1.25em]'>
+        Password:
+      </label>
+      <Input
         type='password'
         name='password'
         id='password'

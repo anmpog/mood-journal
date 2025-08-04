@@ -2,6 +2,7 @@ import type { CreateUserInput } from '@/mutations/useCreateUser'
 import useCreateUser from '@/mutations/useCreateUser'
 import { useState, type ChangeEvent } from 'react'
 import { Button } from '../ui/button'
+import { Input } from '../ui/input'
 
 export default function CreateUser() {
   const initialFormState = {
@@ -43,10 +44,10 @@ export default function CreateUser() {
             }
           )
         }}
-        className='flex flex-col'
+        className='flex flex-col '
       >
         <label htmlFor='firstName'>First Name:</label>
-        <input
+        <Input
           type='text'
           name='firstName'
           id='firstName'
@@ -55,7 +56,7 @@ export default function CreateUser() {
           required
         />
         <label htmlFor='lastName'>Last Name:</label>
-        <input
+        <Input
           type='text'
           name='lastName'
           id='lastName'
@@ -64,7 +65,7 @@ export default function CreateUser() {
           required
         />
         <label htmlFor='email'>Email:</label>
-        <input
+        <Input
           type='email'
           name='email'
           id='email'
@@ -73,7 +74,7 @@ export default function CreateUser() {
           required
         />
         <label htmlFor='password'>Password:</label>
-        <input
+        <Input
           type='password'
           name='password'
           id='password'
