@@ -1,6 +1,6 @@
+import type { CreateUserInput } from '@/mutations/useCreateUser'
+import useCreateUser from '@/mutations/useCreateUser'
 import { useState, type ChangeEvent } from 'react'
-import { type CreateUserInput } from './hooks/useCreateUser'
-import useCreateUserMutation from './hooks/useCreateUser'
 import { Button } from '../ui/button'
 
 export default function CreateUser() {
@@ -8,6 +8,7 @@ export default function CreateUser() {
     firstName: '',
     lastName: '',
     email: '',
+    password: '',
   }
   const [formState, setFormState] = useState<CreateUserInput>(initialFormState)
 
@@ -21,7 +22,7 @@ export default function CreateUser() {
     }
   }
 
-  const { mutate: createUserMutation } = useCreateUserMutation()
+  const { mutate: createUserMutation } = useCreateUser()
 
   const handleFormReset = (): void => {
     setFormState(initialFormState)
@@ -68,6 +69,15 @@ export default function CreateUser() {
           name='email'
           id='email'
           value={formState['email']}
+          onChange={handleChange}
+          required
+        />
+        <label htmlFor='password'>Password:</label>
+        <input
+          type='password'
+          name='password'
+          id='password'
+          value={formState['password']}
           onChange={handleChange}
           required
         />

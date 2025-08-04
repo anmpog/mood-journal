@@ -1,18 +1,37 @@
+import { RouterProvider, createRouter } from '@tanstack/react-router'
+import { routeTree } from './routeTree.gen.ts'
+import { useAuth } from './auth/useAuth.tsx'
+import { AuthProvider } from './AuthProvider.tsx'
 import { QueryClientProvider } from '@tanstack/react-query'
-import { queryClient } from './utils/trpc'
-import UserTable from './components/User/UserTable/UserTable.tsx'
-import CreateUser from './components/User/CreateUser.tsx'
+import { queryClient } from './utils/trpc.ts'
+import { trpc } from './utils/trpc.ts'
 
-function App() {
-  return (
-    <div className='min-w-xs max-w-5xl mx-auto p-4'>
-      <QueryClientProvider client={queryClient}>
-        <h1>Mood Journal</h1>
-        <UserTable />
-        <CreateUser />
-      </QueryClientProvider>
-    </div>
-  )
+const router = createRouter({
+  routeTree,
+  context: {
+    auth: undefined!,
+    queryClient,
+    trpc,
+  },
+})
+
+declare module '@tanstack/react-router' {
+  interface Register {
+    router: typeof router
+  }
 }
 
-export default App
+function InnerApp() {
+  const auth = useAuth()
+  return <RouterProvider router={router} context={{ auth }} />
+}
+
+export function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <InnerApp />
+      </AuthProvider>
+    </QueryClientProvider>
+  )
+}

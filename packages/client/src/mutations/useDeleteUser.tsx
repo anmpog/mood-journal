@@ -2,7 +2,7 @@ import { trpc } from '@/utils/trpc'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { type inferRouterInputs } from '@trpc/server'
 import type { AppRouter } from 'trpc-server/src/router'
-import { getAllUsersQueryKey } from './useGetAllUsers'
+import { getAllUsersQueryKey } from '../queries/useGetAllUsers'
 
 export type DeleteUserInput = inferRouterInputs<AppRouter>['user']['deleteUser']
 

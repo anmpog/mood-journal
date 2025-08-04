@@ -2,13 +2,14 @@ import { trpc } from '@/utils/trpc'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import type { inferRouterInputs, inferRouterOutputs } from '@trpc/server'
 import type { AppRouter } from 'trpc-server/src/router'
-import { getAllUsersQueryKey } from './useGetAllUsers'
+// import { getAllUsersQueryKey } from '@/queries/useGetAllUsers'
+import { getAllUsersQueryKey } from '@/queries/useGetAllUsers'
 
 export type CreateUserInput = inferRouterInputs<AppRouter>['user']['createUser']
 export type CreateUserOutput =
   inferRouterOutputs<AppRouter>['user']['createUser']
 
-export default function useCreateUserMutation() {
+export default function useCreateUser() {
   const queryClient = useQueryClient()
 
   const createUserMutationOptions = trpc.user.createUser.mutationOptions({

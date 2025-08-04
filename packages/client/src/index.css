@@ -1,13 +1,86 @@
 @import 'tailwindcss';
-@import "tw-animate-css";
+@import 'tw-animate-css';
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  html {
+    font-size: 87.5%;
+  }
+
+  body {
+    line-height: 1.4;
+    font-family:
+      'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
+      'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+
+  h1 {
+    font-size: var(--fs-heading-h1);
+  }
+
+  h2 {
+    font-size: var(--fs-heading-h2);
+  }
+
+  h3 {
+    font-size: var(--fs-heading-h3);
+  }
+
+  h4 {
+    font-size: var(--fs-heading-h4);
+  }
+
+  h5 {
+    font-size: var(--fs-heading-h5);
+  }
+
+  h6 {
+    font-size: var(--fs-heading-h6);
+  }
+}
+
+/* Styles for small screens through medium screens */
+@media (width>= theme(--breakpoint-sm)) {
+  html {
+    font-size: 100%;
+  }
+}
+
+/* styles for medium screens through large screens */
+@media (width >= theme(--breakpoint-md)) {
+  html {
+    font-size: 112.5%;
+  }
+}
+
+/* Custom classes */
+.flow-content * > * {
+  margin-top: 1em;
+}
 
 @custom-variant dark (&:is(.dark *));
 
-@layer base {
+@theme {
+  /* Minor Third type scale: 1.2 ratio */
+  --fs-paragraph-text: 1rem;
+  --fs-heading-h1: 2.986rem;
+  --fs-heading-h2: 2.488rem;
+  --fs-heading-h3: 2.047rem;
+  --fs-heading-h4: 1.728rem;
+  --fs-heading-h5: 1.44rem;
+  --fs-heading-h6: 1.2rem;
+  --fs-small-text: 0.833rem;
+  --fs-xs-text: 0.694rem;
 }
 
 @theme inline {
-
   --radius-sm: calc(var(--radius) - 4px);
 
   --radius-md: calc(var(--radius) - 2px);
@@ -80,7 +153,6 @@
 }
 
 :root {
-
   --radius: 0.625rem;
 
   --background: oklch(1 0 0);
@@ -147,7 +219,6 @@
 }
 
 .dark {
-
   --background: oklch(0.141 0.005 285.823);
 
   --foreground: oklch(0.985 0 0);
@@ -209,13 +280,4 @@
   --sidebar-border: oklch(1 0 0 / 10%);
 
   --sidebar-ring: oklch(0.552 0.016 285.938);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }

@@ -1,5 +1,5 @@
 import type { ColumnDef } from '@tanstack/react-table'
-import { type CreateUserOutput } from '../hooks/useCreateUser'
+import type { CreateUserOutput } from '@/mutations/useCreateUser'
 import { DeleteUser } from '../DeleteUser'
 
 export const columns: ColumnDef<CreateUserOutput>[] = [
@@ -8,10 +8,15 @@ export const columns: ColumnDef<CreateUserOutput>[] = [
   { accessorKey: 'lastName', header: 'Last Name' },
   { accessorKey: 'email', header: 'Email' },
   {
+    accessorKey: 'password',
+    header: 'Password',
+    maxSize: 150,
+  },
+  {
     accessorKey: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
-      const userId = row.original.id
+      const userId = row.original?.id
       return <DeleteUser userId={userId} />
     },
   },
