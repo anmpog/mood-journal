@@ -1,13 +1,18 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": "src",
+    "baseUrl": ".",
     "paths": {
-      "@/*": ["*"]
-    }
-  }
+      "@/*": ["src/*"],
+      "@shared/*": ["../shared/src/*"]
+    },
+    "target": "esnext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "lib": ["DOM", "ESNext"],
+    "esModuleInterop": true,
+    "strict": true
+  },
+  "include": ["src"]
 }

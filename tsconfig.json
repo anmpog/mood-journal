@@ -1,0 +1,16 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/client" },
+    { "path": "packages/server" },
+    { "path": "packages/shared" }
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "baseUrl": ".",
+    "strict": true,
+    "paths": {
+      "@shared": ["packages/shared/src"]
+    }
+  }
+}
