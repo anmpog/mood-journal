@@ -8,22 +8,33 @@ generator client {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  email        String         @unique
-  firstName    String
-  lastName     String
-  password     String
-  JournalEntry JournalEntry[]
+  id             Int            @id @default(autoincrement())
+  email          String         @unique
+  firstName      String
+  lastName       String
+  password       String
+  journalEntries JournalEntry[]
 }
 
 model JournalEntry {
-  id           Int      @id @default(autoincrement())
-  createdAt    DateTime
-  author       User     @relation(fields: [userId], references: [id])
+  id           Int           @id @default(autoincrement())
+  author       User          @relation(fields: [userId], references: [id])
+  createdAt    DateTime      @default(now())
   userId       Int
   moodRating   Int
   stressRating Int
-  activities   String[]
   sleepHours   Int
   sleepQuality Int
+  activities   ActivityLog[]
+}
+
+model ActivityLog {
+  id                 Int          @id @default(autoincrement())
+  JournalEntry       JournalEntry @relation(fields: [journalEntryId], references: [id])
+  journalEntryId     Int
+  activityTitle      String
+  durationRating     Int?
+  intensityRating    Int?
+  qualitativeRating  Int?
+  quantitativeRating Int?
 }
