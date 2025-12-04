@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
-import UserTable from '@/components/User/UserTable/UserTable.tsx'
-import CreateUser from '@/components/User/CreateUser.tsx'
+import UserTable from '@/components/User/UserTable/UserTable'
+import CreateUser from '@/components/User/CreateUser'
 
 export const Route = createFileRoute('/')({
   component: Index,
