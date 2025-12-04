@@ -1,7 +1,7 @@
-import { authedProcedure, publicProcedure, router } from '../trpc'
-import { z } from 'zod'
-import { argon2id, hash, verify } from 'argon2'
 import { TRPCError } from '@trpc/server'
+import { argon2id, hash, verify } from 'argon2'
+import { z } from 'zod'
+import { authedProcedure, publicProcedure, router } from '../trpc'
 import { signJwt } from '../utils/jwt'
 
 // Argon2 options
@@ -140,14 +140,21 @@ export const UserRouter = router({
 
       const user = await ctx.prisma.user.findUnique({
         where: { id: userId },
+        include: {
+          journalEntries: {
+            include: {
+              activities: true,
+            },
+          },
+        },
       })
 
       if (!user) {
         throw new TRPCError({ code: 'NOT_FOUND' })
       }
 
-      const { firstName, lastName } = user
+      const { firstName, lastName, journalEntries } = user
 
-      return Success({ firstName, lastName })
+      return Success({ firstName, lastName, journalEntries })
     }),
 })
