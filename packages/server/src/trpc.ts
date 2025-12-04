@@ -40,11 +40,7 @@ export const router = t.router
 
 // Testing middleware for understanding
 export const authedProcedure = t.procedure.use(async (opts) => {
-  console.log('Authed Procedure Middleware')
-  console.log('Headers: ', opts.ctx.req.headers)
-
   const token = opts.ctx.req.headers.authorization?.split(' ')[1]
-  console.log('Token on its own: ', token)
   if (!token) {
     throw new TRPCError({
       message: 'Please authenticate.',

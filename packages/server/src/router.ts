@@ -1,8 +1,6 @@
-import { initTRPC } from '@trpc/server'
 import { UserRouter } from './routes/User'
 import { JournalRouter } from './routes/Journal'
-
-export const t = initTRPC.create()
+import { t } from './trpc'
 
 export const appRouter = t.router({
   user: UserRouter,
