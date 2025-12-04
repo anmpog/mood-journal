@@ -10,9 +10,7 @@
     "esModuleInterop": true,
     "types": ["node"],
     "strict": true,
-    "baseUrl": ".",
-    "paths": { "@shared/*": ["../shared/src/*"] }
+    "baseUrl": "."
   },
-  "references": [{ "path": "../shared" }],
   "include": ["src"]
 }

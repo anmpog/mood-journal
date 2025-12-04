@@ -2,8 +2,8 @@
   "name": "trpc-server",
   "type": "module",
   "version": "0.0.1",
-  "description": "GraphQL server",
-  "main": "index.js",
+  "description": "tRPC server",
+  "main": "main.ts",
   "author": "Anthony Pogliano",
   "license": "MIT",
   "engines": {
