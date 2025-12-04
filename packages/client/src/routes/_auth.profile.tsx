@@ -1,4 +1,5 @@
 import { useAuth, useAuthUserData } from '@/auth/useAuth'
+import CreateJournalEntry from '@/components/CreateJournalEntry'
 import useGetUserProfile from '@/queries/useGetUserProfile'
 import { createFileRoute } from '@tanstack/react-router'
 
@@ -45,13 +46,13 @@ function RouteComponent() {
     const { firstName, lastName } = userProfileData.data
     return (
       <>
-        <h2>Journals will go here</h2>
-        <h3>
-          Welcome back,{' '}
+        <h2>
+          Welcome back,
           <span className='capitalize'>
             {firstName} {lastName}
           </span>
-        </h3>
+        </h2>
+        <CreateJournalEntry />
       </>
     )
   }
