@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 export const activityLogTitleEnum = z.enum([
+  'NONE',
   'SOCIALIZING',
   'PHYSICAL ACTIVITY',
   'OUTDOOR TIME',

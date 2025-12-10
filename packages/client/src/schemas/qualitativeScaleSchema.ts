@@ -1,6 +1,8 @@
-import { z } from 'zod'
+// Not sure the best way to make this value track the values expected by the
+// server.
 
-export const qualitativeScaleUIOptions = [
+export const qualitativeScaleUISchema = [
+  { value: 0, key: 'none', label: 'None' },
   {
     value: 1,
     key: 'very_negative',
@@ -27,33 +29,3 @@ export const qualitativeScaleUIOptions = [
     label: 'Very Positive',
   },
 ]
-
-export const qualitativeScaleOptions = [
-  z.object({
-    value: z.literal(1),
-    key: z.literal('very_negative'),
-    label: z.literal('Very Negative'),
-  }),
-  z.object({
-    value: z.literal(2),
-    key: z.literal('negative'),
-    label: z.literal('Negative'),
-  }),
-  z.object({
-    value: z.literal(3),
-    key: z.literal('neutral'),
-    label: z.literal('Neutral'),
-  }),
-  z.object({
-    value: z.literal(4),
-    key: z.literal('somewhat_positive'),
-    label: z.literal('Somewhat Positive'),
-  }),
-  z.object({
-    value: z.literal(5),
-    key: z.literal('very_positive'),
-    label: z.literal('Very Positive'),
-  }),
-]
-
-export const qualitativeScaleSchema = z.union(qualitativeScaleOptions)

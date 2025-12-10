@@ -1,6 +1,7 @@
-import { z } from 'zod'
+// Not sure the best way to make this value track the values expected by the
+// server.
 
-export const durationScaleUIOptions = [
+export const durationScaleUISchema = [
   {
     value: 0,
     key: 'none',
@@ -32,38 +33,3 @@ export const durationScaleUIOptions = [
     label: '2+ hours',
   },
 ]
-
-const durationScaleOptions = [
-  z.object({
-    value: z.literal(0),
-    key: z.literal('none'),
-    label: z.literal('None'),
-  }),
-  z.object({
-    value: z.literal(1),
-    key: z.literal('0_15'),
-    label: z.literal('15 Minutes or Less'),
-  }),
-  z.object({
-    value: z.literal(2),
-    key: z.literal('15_30'),
-    label: z.literal('15-30 Minutes'),
-  }),
-  z.object({
-    value: z.literal(3),
-    key: z.literal('30_60'),
-    label: z.literal('30-60 Minutes'),
-  }),
-  z.object({
-    value: z.literal(4),
-    key: z.literal('60_120'),
-    label: z.literal('1-2 Hours'),
-  }),
-  z.object({
-    value: z.literal(5),
-    key: z.literal('120_plus'),
-    label: z.literal('2+ hours'),
-  }),
-]
-
-export const durationScaleSchema = z.union(durationScaleOptions)
