@@ -2,7 +2,6 @@
 // server.
 
 export const intensityScaleUISchema = [
-  { value: 0, key: 'none', label: 'None' },
   {
     value: 1,
     key: 'very_light',
