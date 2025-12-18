@@ -15,7 +15,7 @@ export const ActivityEntry = ({
   handleRemoveActivity,
 }: {
   activity: ClientActivityEntryType
-  handleRemoveActivity: (activityId: string) => void
+  handleRemoveActivity: (activityId: number) => void
 }) => {
   return (
     <Card className='basis-1/3 relative'>
