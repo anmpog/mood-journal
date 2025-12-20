@@ -33,26 +33,39 @@ const defaultFormValues: JournalEntryDefaultValuesType = {
   activities: [],
 }
 
+function updateArrayWithoutMutate(originalValue, valueToAdd) {
+  return [...originalValue, { ...valueToAdd }]
+}
+
 export default function CreateJournalEntry() {
   const formik = useFormik({
     initialValues: {
       ...defaultFormValues,
     },
     onSubmit: (values) => {
-      console.log('Use formik handle submit fire')
+      console.log('Parent form handle submit fire')
       alert(JSON.stringify(values, null, 2))
     },
   })
 
-  const handleAddActivityToActivitiesArray = (arrayField, value) => {
-    console.log('handleAddActivityToActivityArray: ', arrayField, value)
-    // set field value should validate needs to end up as true
-    // formik.setFieldValue('activities', value, false)
-    formik.values.activities.push(value)
-    console.log('Formik state: ', formik)
+  const handleCreateActivity = (fieldName, activityValue) => {
+    const activityWithId = {
+      ...activityValue,
+      activityId: crypto.randomUUID(),
+    }
+    formik.setFieldValue(
+      fieldName,
+      updateArrayWithoutMutate(formik.values[fieldName], activityWithId)
+    )
   }
 
-  console.log('Parent formik instance: ', formik)
+  const handleRemoveActivity = (fieldName, objectValue, identifier) => {
+    const filtered = formik.values[fieldName].filter((value) => {
+      return value[objectValue] !== identifier
+    })
+
+    formik.setFieldValue(fieldName, filtered)
+  }
 
   return (
     <>
@@ -171,7 +184,8 @@ export default function CreateJournalEntry() {
           </Field>
           <ActivityEntrySubform
             formik={formik}
-            handleAddActivity={handleAddActivityToActivitiesArray}
+            handleAddActivity={handleCreateActivity}
+            handleRemoveActivity={handleRemoveActivity}
           />
           <Button type='submit'>Record Journal Entry</Button>
         </FormikProvider>

@@ -1,5 +1,5 @@
 import { activityLogTitleEnum } from '@/enums/activityLogTitleEnum'
-import { Field, useFormik } from 'formik'
+import { Field, useFormik, useFormikContext } from 'formik'
 import startCase from 'lodash.startcase'
 import { useState } from 'react'
 import { Button } from './ui/button'
@@ -19,6 +19,8 @@ import { activityDurationScaleUISchema } from '@/schemas/activityDurationScaleSc
 import { intensityScaleUISchema } from '@/schemas/intensityScaleSchema'
 import { qualitativeScaleUISchema } from '@/schemas/qualitativeScaleSchema'
 import { quantitativeScaleUISchema } from '@/schemas/quantitativeScaleSchema'
+import { ClientActivityEntryType } from '@/types/ClientActivityEntry'
+import { ActivityEntry } from './ActivityEntry'
 import { Label } from './ui/label'
 import {
   Select,
@@ -44,12 +46,25 @@ const activityEntryDefaultFormValues: ActivityEntryDefaultValuesType = {
 }
 
 // Child form for creating journal entry, but I want it to maintain its own state
-export const ActivityEntrySubform = ({ handleAddActivity }) => {
-  // console.log('ON add to activity entry subform: ', handleAddActivity)
+export const ActivityEntrySubform = ({
+  handleAddActivity,
+  handleRemoveActivity,
+}) => {
+  // Instantiate individual formik instance to handle the state of this part of
+  // the UI.
   const activityEntryForm = useFormik({
     initialValues: activityEntryDefaultFormValues,
     onSubmit: () => console.log('Activity Entry SubForm Submit'),
   })
+
+  // Parent form's context so we can see/modify parent state more intuitively
+  const {
+    values: { activities },
+  } = useFormikContext()
+
+  console.log('Activities state: ', activities)
+
+  // Dialog controls are local to this component
   const [activityDialogOpen, setActivityDialogOpen] = useState<boolean>(false)
 
   const handleCloseActivityDialog = (): void => {
@@ -63,6 +78,19 @@ export const ActivityEntrySubform = ({ handleAddActivity }) => {
   return (
     <>
       <h3>Activity Entries</h3>
+      <div className='flex flex-wrap'>
+        {activities.length === 0 ? (
+          <p>Use the Add Activity form to add activities to track!</p>
+        ) : (
+          activities.map((activity: ClientActivityEntryType) => (
+            <ActivityEntry
+              key={activity.activityId}
+              activity={activity}
+              handleRemoveActivity={handleRemoveActivity}
+            />
+          ))
+        )}
+      </div>
       <Dialog open={activityDialogOpen} onOpenChange={setActivityDialogOpen}>
         <div className='flex gap-2 mt-5'>
           <DialogTrigger asChild>
@@ -122,7 +150,7 @@ export const ActivityEntrySubform = ({ handleAddActivity }) => {
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder='Select an Activity' />
+                      <SelectValue placeholder='Select a Duration' />
                     </SelectTrigger>
                     <SelectContent>
                       {activityDurationScaleUISchema.map(
@@ -150,7 +178,7 @@ export const ActivityEntrySubform = ({ handleAddActivity }) => {
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder='Select an Activity' />
+                      <SelectValue placeholder='Select an Intensity' />
                     </SelectTrigger>
                     <SelectContent>
                       {intensityScaleUISchema.map(({ value, label }, index) => (
@@ -176,7 +204,7 @@ export const ActivityEntrySubform = ({ handleAddActivity }) => {
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder='Select an Activity' />
+                      <SelectValue placeholder='Select an Intensity' />
                     </SelectTrigger>
                     <SelectContent>
                       {qualitativeScaleUISchema.map(
@@ -204,7 +232,7 @@ export const ActivityEntrySubform = ({ handleAddActivity }) => {
                     }}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder='Select an Activity' />
+                      <SelectValue placeholder='Select an Quantity' />
                     </SelectTrigger>
                     <SelectContent>
                       {quantitativeScaleUISchema.map(

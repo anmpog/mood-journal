@@ -15,7 +15,11 @@ export const ActivityEntry = ({
   handleRemoveActivity,
 }: {
   activity: ClientActivityEntryType
-  handleRemoveActivity: (activityId: number) => void
+  handleRemoveActivity: (
+    fieldName: string,
+    objectValue: string,
+    identifier: string
+  ) => void
 }) => {
   return (
     <Card className='basis-1/3 relative'>
@@ -23,12 +27,15 @@ export const ActivityEntry = ({
         variant='ghost'
         size='icon-sm'
         className='rounded-full absolute top-2 right-2'
-        onClick={() => handleRemoveActivity(activityId)}
+        onClick={() =>
+          handleRemoveActivity('activities', 'activityId', activityId)
+        }
       >
         <X />
       </Button>
       <CardHeader>
-        <CardTitle>Activity Title: {activityTitle}</CardTitle>
+        <CardTitle>Activity: {activityTitle}</CardTitle>
+        <small>{activityId}</small>
       </CardHeader>
       <CardContent>
         <p>Duration: {durationRating}</p>
