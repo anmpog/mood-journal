@@ -1,11 +1,10 @@
 import { activityLogTitleEnum } from '@/enums/activityLogTitleEnum'
-import { Field, useFormik, useFormikContext } from 'formik'
+import { FormikProvider, useFormik, useFormikContext } from 'formik'
 import startCase from 'lodash.startcase'
 import { useState } from 'react'
 import { Button } from './ui/button'
 
 import { ActivityEntryDefaultValuesType } from '@/types/ActivityEntryDefaultValues'
-import type { FieldProps } from 'formik'
 import {
   Dialog,
   DialogContent,
@@ -21,14 +20,7 @@ import { qualitativeScaleUISchema } from '@/schemas/qualitativeScaleSchema'
 import { quantitativeScaleUISchema } from '@/schemas/quantitativeScaleSchema'
 import { ClientActivityEntryType } from '@/types/ClientActivityEntry'
 import { ActivityEntry } from './ActivityEntry'
-import { Label } from './ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from './ui/select'
+import SelectField from './form/SelectField'
 
 const activityTitleOptions = activityLogTitleEnum.options.map((option) => {
   return {
@@ -59,10 +51,10 @@ export const ActivityEntrySubform = ({
 
   // Parent form's context so we can see/modify parent state more intuitively
   const {
-    values: { activities },
+    values: { activities: parentActivitiesState },
   } = useFormikContext()
 
-  console.log('Activities state: ', activities)
+  console.log('Parent form activities: ', parentActivitiesState)
 
   // Dialog controls are local to this component
   const [activityDialogOpen, setActivityDialogOpen] = useState<boolean>(false)
@@ -79,10 +71,10 @@ export const ActivityEntrySubform = ({
     <>
       <h3>Activity Entries</h3>
       <div className='flex flex-wrap'>
-        {activities.length === 0 ? (
+        {parentActivitiesState.length === 0 ? (
           <p>Use the Add Activity form to add activities to track!</p>
         ) : (
-          activities.map((activity: ClientActivityEntryType) => (
+          parentActivitiesState.map((activity: ClientActivityEntryType) => (
             <ActivityEntry
               key={activity.activityId}
               activity={activity}
@@ -97,6 +89,7 @@ export const ActivityEntrySubform = ({
             <Button variant='outline'>Add Activity</Button>
           </DialogTrigger>
           <Button
+            type='button'
             variant='destructive'
             onClick={() => console.log('Clear Activities')}
           >
@@ -112,157 +105,57 @@ export const ActivityEntrySubform = ({
               you want to track.
             </DialogDescription>
           </DialogHeader>
-          <Field name={'activityTitle'} id={'activityTitle'}>
-            {({ field }: FieldProps) => {
-              return (
-                <>
-                  <Label htmlFor={field.name}>Activity Title</Label>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value: string) => {
-                      activityEntryForm.setFieldValue(field.name, value)
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder='Select an Activity' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {activityTitleOptions.map(({ value, label }, index) => (
-                        <SelectItem value={value} key={index}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </>
-              )
-            }}
-          </Field>
-          <Field name={'durationRating'} id={'durationRating'}>
-            {({ field }: FieldProps) => {
-              return (
-                <>
-                  <Label htmlFor={field.name}>Activity Duration</Label>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value: string) => {
-                      activityEntryForm.setFieldValue(field.name, value)
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder='Select a Duration' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {activityDurationScaleUISchema.map(
-                        ({ value, label }, index) => (
-                          <SelectItem value={value.toString()} key={index}>
-                            {label}
-                          </SelectItem>
-                        )
-                      )}
-                    </SelectContent>
-                  </Select>
-                </>
-              )
-            }}
-          </Field>
-          <Field name={'intensityRating'} id={'intensityRating'}>
-            {({ field }: FieldProps) => {
-              return (
-                <>
-                  <Label htmlFor={field.name}>Intensity Rating</Label>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value: string) => {
-                      activityEntryForm.setFieldValue(field.name, value)
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder='Select an Intensity' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {intensityScaleUISchema.map(({ value, label }, index) => (
-                        <SelectItem value={value.toString()} key={index}>
-                          {label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </>
-              )
-            }}
-          </Field>
-          <Field name={'qualitativeRating'} id={'intensityRating'}>
-            {({ field }: FieldProps) => {
-              return (
-                <>
-                  <Label htmlFor={field.name}>Qualitative Rating</Label>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value: string) => {
-                      activityEntryForm.setFieldValue(field.name, value)
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder='Select an Intensity' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {qualitativeScaleUISchema.map(
-                        ({ value, label }, index) => (
-                          <SelectItem value={value.toString()} key={index}>
-                            {label}
-                          </SelectItem>
-                        )
-                      )}
-                    </SelectContent>
-                  </Select>
-                </>
-              )
-            }}
-          </Field>
-          <Field name={'quantitativeRating'} id={'quantitativeRating'}>
-            {({ field }: FieldProps) => {
-              return (
-                <>
-                  <Label htmlFor={field.name}>Quantitative Rating</Label>
-                  <Select
-                    value={field.value}
-                    onValueChange={(value: string) => {
-                      activityEntryForm.setFieldValue(field.name, value)
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder='Select an Quantity' />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {quantitativeScaleUISchema.map(
-                        ({ value, label }, index) => (
-                          <SelectItem value={value.toString()} key={index}>
-                            {label}
-                          </SelectItem>
-                        )
-                      )}
-                    </SelectContent>
-                  </Select>
-                </>
-              )
-            }}
-          </Field>
-          <div className='flex gap-2 mt-5 justify-end'>
-            <Button
-              type='button'
-              onClick={() => {
-                handleAddActivity('activities', activityEntryForm.values)
-                handleResetForm()
-                handleCloseActivityDialog()
-              }}
-            >
-              Add Activity
-            </Button>
-            <Button type='reset' variant='destructive'>
-              Reset Fields
-            </Button>
-          </div>
+          <FormikProvider value={activityEntryForm}>
+            <SelectField
+              name='activityTitle'
+              label='Activity Title'
+              placeholderText='Select an Activity'
+              optionsArr={activityTitleOptions}
+            />
+            <SelectField
+              name='durationRating'
+              label='Duration'
+              placeholderText='Select a Duration'
+              optionsArr={activityDurationScaleUISchema}
+            />
+            <SelectField
+              name='intensityRating'
+              label='Intensity'
+              placeholderText='Select an Intensity'
+              optionsArr={intensityScaleUISchema}
+            />
+            <SelectField
+              name='qualitativeRating'
+              label='Qualitative Rating'
+              placeholderText='Select a Quality'
+              optionsArr={qualitativeScaleUISchema}
+            />
+            <SelectField
+              name={'quantitativeRating'}
+              label='Quantity'
+              placeholderText='Select a Quantity'
+              optionsArr={quantitativeScaleUISchema}
+            />
+            <div className='flex gap-2 mt-5 justify-end'>
+              <Button
+                type='button'
+                onClick={() => {
+                  console.log(
+                    'Activity entry form values at submit click: ',
+                    activityEntryForm.values
+                  )
+                  handleAddActivity('activities', activityEntryForm.values)
+                  handleResetForm()
+                  handleCloseActivityDialog()
+                }}
+              >
+                Add Activity
+              </Button>
+              <Button type='reset' variant='destructive'>
+                Reset Fields
+              </Button>
+            </div>
+          </FormikProvider>
         </DialogContent>
       </Dialog>
     </>
