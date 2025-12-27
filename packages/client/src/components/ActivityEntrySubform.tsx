@@ -19,7 +19,10 @@ import { intensityScaleUISchema } from '@/schemas/intensityScaleSchema'
 import { qualitativeScaleUISchema } from '@/schemas/qualitativeScaleSchema'
 import { quantitativeScaleUISchema } from '@/schemas/quantitativeScaleSchema'
 import { ClientActivityEntryType } from '@/types/ClientActivityEntry'
-import { ActivityEntry } from './ActivityEntry'
+import { JournalEntryDefaultValuesType } from '@/types/JournalEntryDefaultValues'
+import addValueToArray from '@/utils/addValueToArray'
+import filterValueFromArray from '@/utils/filterValueFromArray'
+import { CreatedActivityEntry } from './CreatedActivityEntry'
 import SelectField from './form/SelectField'
 
 const activityTitleOptions = activityLogTitleEnum.options.map((option) => {
@@ -38,28 +41,39 @@ const activityEntryDefaultFormValues: ActivityEntryDefaultValuesType = {
 }
 
 // Child form for creating journal entry, but I want it to maintain its own state
-export const ActivityEntrySubform = ({
-  handleAddActivity,
-  handleRemoveActivity,
-}) => {
-  // Instantiate individual formik instance to handle the state of this part of
-  // the UI.
-  const activityEntryForm = useFormik({
-    initialValues: activityEntryDefaultFormValues,
-    onSubmit: () => console.log('Activity Entry SubForm Submit'),
-  })
-
-  // Parent form's context so we can see/modify parent state more intuitively
-  const {
-    values: { activities: parentActivitiesState },
-  } = useFormikContext()
-
-  console.log('Parent form activities: ', parentActivitiesState)
-
-  // Dialog controls are local to this component
+export const ActivityEntrySubform = () => {
   const [activityDialogOpen, setActivityDialogOpen] = useState<boolean>(false)
 
+  const activityEntryForm = useFormik({
+    initialValues: activityEntryDefaultFormValues,
+    // Formik doesn't allow you to opt out of onSubmit, not using a <form> so
+    // this is useless for this particular bit of UI.
+    onSubmit: () => {},
+  })
+
+  // Parent form context so we can modify activity state on parent
+  const {
+    values: { activities },
+    initialValues: { activities: activitiesInitialState },
+    setFieldValue,
+  } = useFormikContext<JournalEntryDefaultValuesType>()
+
+  const handleAddActivityEntry = (value: ClientActivityEntryType) => {
+    setFieldValue('activities', addValueToArray(activities, value))
+  }
+
+  const handleRemoveActivityEntry = (activityId: string) => {
+    const filtered = filterValueFromArray(activities, 'activityId', activityId)
+
+    setFieldValue('activities', filtered)
+  }
+
+  const handleResetActivityEntries = () => {
+    setFieldValue('activities', activitiesInitialState)
+  }
+
   const handleCloseActivityDialog = (): void => {
+    handleResetForm()
     setActivityDialogOpen(false)
   }
 
@@ -67,23 +81,36 @@ export const ActivityEntrySubform = ({
     activityEntryForm.resetForm()
   }
 
+  const handleToggleDialog = (): void => {
+    setActivityDialogOpen(!activityDialogOpen)
+    handleResetForm()
+  }
+
+  const createActivityWithId = (activity: ActivityEntryDefaultValuesType) => {
+    const id = crypto.randomUUID()
+    return {
+      ...activity,
+      activityId: id,
+    }
+  }
+
   return (
     <>
       <h3>Activity Entries</h3>
       <div className='flex flex-wrap'>
-        {parentActivitiesState.length === 0 ? (
+        {activities.length === 0 ? (
           <p>Use the Add Activity form to add activities to track!</p>
         ) : (
-          parentActivitiesState.map((activity: ClientActivityEntryType) => (
-            <ActivityEntry
+          activities.map((activity: ClientActivityEntryType) => (
+            <CreatedActivityEntry
               key={activity.activityId}
               activity={activity}
-              handleRemoveActivity={handleRemoveActivity}
+              handleRemoveActivity={handleRemoveActivityEntry}
             />
           ))
         )}
       </div>
-      <Dialog open={activityDialogOpen} onOpenChange={setActivityDialogOpen}>
+      <Dialog open={activityDialogOpen} onOpenChange={handleToggleDialog}>
         <div className='flex gap-2 mt-5'>
           <DialogTrigger asChild>
             <Button variant='outline'>Add Activity</Button>
@@ -91,7 +118,7 @@ export const ActivityEntrySubform = ({
           <Button
             type='button'
             variant='destructive'
-            onClick={() => console.log('Clear Activities')}
+            onClick={() => handleResetActivityEntries()}
           >
             Clear Activities
           </Button>
@@ -140,18 +167,20 @@ export const ActivityEntrySubform = ({
               <Button
                 type='button'
                 onClick={() => {
-                  console.log(
-                    'Activity entry form values at submit click: ',
-                    activityEntryForm.values
+                  handleAddActivityEntry(
+                    createActivityWithId(activityEntryForm.values)
                   )
-                  handleAddActivity('activities', activityEntryForm.values)
                   handleResetForm()
                   handleCloseActivityDialog()
                 }}
               >
                 Add Activity
               </Button>
-              <Button type='reset' variant='destructive'>
+              <Button
+                type='reset'
+                variant='destructive'
+                onClick={handleResetForm}
+              >
                 Reset Fields
               </Button>
             </div>

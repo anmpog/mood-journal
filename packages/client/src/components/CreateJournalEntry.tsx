@@ -10,9 +10,7 @@ import { stressRatingScaleSchema } from '@/schemas/stressRatingScaleSchema'
 import { JournalEntryDefaultValuesType } from '@/types/JournalEntryDefaultValues'
 import SelectField from './form/SelectField'
 
-/* eslint no-console: "error" */
-
-const defaultFormValues: JournalEntryDefaultValuesType = {
+const defaultJournalEntryValues: JournalEntryDefaultValuesType = {
   moodRating: '',
   stressRating: '',
   sleepDuration: '',
@@ -20,39 +18,15 @@ const defaultFormValues: JournalEntryDefaultValuesType = {
   activities: [],
 }
 
-function updateArrayWithoutMutate(originalValue, valueToAdd) {
-  return [...originalValue, { ...valueToAdd }]
-}
-
 export default function CreateJournalEntry() {
-  const formik = useFormik({
+  const formik = useFormik<JournalEntryDefaultValuesType>({
     initialValues: {
-      ...defaultFormValues,
+      ...defaultJournalEntryValues,
     },
     onSubmit: (values) => {
-      console.log('Parent form handle submit fire')
       alert(JSON.stringify(values, null, 2))
     },
   })
-
-  const handleCreateActivity = (fieldName, activityValue) => {
-    const activityWithId = {
-      ...activityValue,
-      activityId: crypto.randomUUID(),
-    }
-    formik.setFieldValue(
-      fieldName,
-      updateArrayWithoutMutate(formik.values[fieldName], activityWithId)
-    )
-  }
-
-  const handleRemoveActivity = (fieldName, objectValue, identifier) => {
-    const filtered = formik.values[fieldName].filter((value) => {
-      return value[objectValue] !== identifier
-    })
-
-    formik.setFieldValue(fieldName, filtered)
-  }
 
   return (
     <>
@@ -84,11 +58,7 @@ export default function CreateJournalEntry() {
               placeholderText='Select a Sleep Quality'
               optionsArr={sleepQualityScaleSchema}
             />
-            <ActivityEntrySubform
-              formik={formik}
-              handleAddActivity={handleCreateActivity}
-              handleRemoveActivity={handleRemoveActivity}
-            />
+            <ActivityEntrySubform />
             <Button type='submit'>Record Journal Entry</Button>
           </Form>
         </FormikProvider>
