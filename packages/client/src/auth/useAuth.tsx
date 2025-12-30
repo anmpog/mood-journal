@@ -1,8 +1,5 @@
-import type {
-  UserDataFromJwt,
-  LoginUserInput,
-} from '@/mutations/useLoginUser'
-import { useContext, createContext } from 'react'
+import type { LoginUserInput, UserDataFromJwt } from '@/mutations/useLoginUser'
+import { createContext, useContext } from 'react'
 
 export type AuthContextType = {
   isAuthenticated: boolean
@@ -10,14 +7,6 @@ export type AuthContextType = {
   logout: () => void
   userToken: string | null
   userData: UserDataFromJwt | null
-}
-
-export function useAuthUserData(authContext: AuthContextType) {
-  if (!authContext.userData) {
-    throw new Error('User Data is not defined.')
-  }
-
-  return authContext.userData
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null)
@@ -30,4 +19,14 @@ export function useAuth() {
   }
 
   return context
+}
+
+export function useAuthedUserData(): UserDataFromJwt {
+  const authContext = useAuth()
+
+  if (!authContext.userData) {
+    throw new Error('Invalid user.')
+  }
+
+  return authContext.userData
 }

@@ -1,4 +1,4 @@
-import { useAuth, useAuthUserData } from '@/auth/useAuth'
+import { useAuthedUserData } from '@/auth/useAuth'
 import CreateJournalEntry from '@/components/CreateJournalEntry'
 import useGetUserProfile from '@/queries/useGetUserProfile'
 import { createFileRoute } from '@tanstack/react-router'
@@ -22,8 +22,8 @@ export const Route = createFileRoute('/_auth/profile')({
 })
 
 function RouteComponent() {
-  const auth = useAuth()
-  const { userId } = useAuthUserData(auth)
+  const { userId } = useAuthedUserData()
+
   const {
     isLoading,
     isError,
