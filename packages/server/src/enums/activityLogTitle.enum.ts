@@ -1,0 +1,16 @@
+import z from 'zod'
+
+export const ActivityLogTitleEnumV1 = z.enum([
+  'SOCIALIZING',
+  'PHYSICAL ACTIVITY',
+  'OUTDOOR TIME',
+  'MEDITATION/MINDFULNESS',
+  'CREATIVE PURSUITS',
+  'VOLUNTEERING',
+  'REFLECTION/JOURNALING',
+  'FAITH/SPIRITUALITY',
+  'HOBBIES',
+  'FAMILY TIME',
+  'SCREEN TIME',
+  'SUBSTANCE USE',
+] as const)
