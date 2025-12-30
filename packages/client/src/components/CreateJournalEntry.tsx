@@ -1,14 +1,15 @@
 // import { Button } from '@/components/ui/button'
-import { Form, FormikProvider, useFormik } from 'formik'
-import { ActivityEntrySubform } from './ActivityEntrySubform'
-import { Button } from './ui/button'
-
+import { useAuthedUserData } from '@/auth/useAuth'
+import useCreateJournalEntry from '@/mutations/useCreateJournalEntry'
 import { moodRatingScaleSchema } from '@/schemas/moodRatingScaleSchema'
 import { sleepDurationScaleSchema } from '@/schemas/sleepDurationScaleSchema'
 import { sleepQualityScaleSchema } from '@/schemas/sleepQualityScaleSchema'
 import { stressRatingScaleSchema } from '@/schemas/stressRatingScaleSchema'
 import { JournalEntryDefaultValuesType } from '@/types/JournalEntryDefaultValues'
+import { Form, FormikProvider, useFormik } from 'formik'
+import { ActivityEntrySubform } from './ActivityEntrySubform'
 import SelectField from './form/SelectField'
+import { Button } from './ui/button'
 
 const defaultJournalEntryValues: JournalEntryDefaultValuesType = {
   moodRating: '',
@@ -19,12 +20,25 @@ const defaultJournalEntryValues: JournalEntryDefaultValuesType = {
 }
 
 export default function CreateJournalEntry() {
+  const authedUserData = useAuthedUserData()
+
+  if (!authedUserData) {
+    throw new Error('No authenticated user.')
+  }
+
+  const { mutate: createJournalEntry } = useCreateJournalEntry()
+
   const formik = useFormik<JournalEntryDefaultValuesType>({
     initialValues: {
       ...defaultJournalEntryValues,
     },
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
+      const formattedJournalEntry = {
+        userId: authedUserData.userId,
+        ...formik.values,
+      }
       alert(JSON.stringify(values, null, 2))
+      await createJournalEntry(formattedJournalEntry)
     },
   })
 

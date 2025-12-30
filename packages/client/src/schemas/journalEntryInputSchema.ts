@@ -24,7 +24,7 @@ export const journalEntryInputSchema = z.object({
     .int()
     .gte(1, { message: 'Stress Rating cannot be less than 1.' })
     .lte(10, { message: 'Stress Rating cannot be more than 10.' }),
-  sleepHours: z
+  sleepDuration: z
     .number()
     .int()
     .gte(0, { message: 'Sleep Hours cannot be less than 0.' })
