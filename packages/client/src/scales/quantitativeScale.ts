@@ -1,7 +1,7 @@
 // Not sure the best way to make this value track the values expected by the
 // server.
 
-export const quantitativeScaleUISchema = [
+export const quantitativeScale = [
   {
     value: 0,
     key: 'none',

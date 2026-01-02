@@ -1,7 +1,7 @@
 // Not sure the best way to make this value track the values expected by the
 // server.
 
-export const activityDurationScaleUISchema = [
+export const activityDurationScale = [
   {
     value: 1,
     key: '0_15',

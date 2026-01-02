@@ -8,7 +8,7 @@
 // - 9–10 hours
 // - >10 hours
 
-export const sleepDurationScaleSchema = [
+export const sleepDurationScale = [
   {
     value: 1,
     label: 'Less Than 4 Hours',

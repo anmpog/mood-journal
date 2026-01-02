@@ -29,6 +29,7 @@ export const CreatedActivityEntry = ({
   return (
     <Card className='basis-1/3 relative'>
       <Button
+        type='button'
         variant='ghost'
         size='icon-sm'
         className='rounded-full absolute top-2 right-2'

@@ -11,7 +11,7 @@
 // 10 — Perfect
 
 
-export const sleepQualityScaleSchema = [
+export const sleepQualityScale = [
   {
     value: 1,
     label: 'Terrible',

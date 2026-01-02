@@ -1,7 +1,7 @@
 // Not sure the best way to make this value track the values expected by the
 // server.
 
-export const intensityScaleUISchema = [
+export const intensityScale = [
   {
     value: 1,
     key: 'very_light',

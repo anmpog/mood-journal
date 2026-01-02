@@ -10,7 +10,7 @@
 // 9 — Extreme stress
 // 10 — Acute distress
 
-export const stressRatingScaleSchema = [
+export const stressRatingScale = [
   {
     value: 1,
     label: 'No Stress',

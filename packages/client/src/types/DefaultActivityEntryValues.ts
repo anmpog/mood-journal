@@ -1,6 +1,6 @@
 import { ActivityTitleType } from './ActivityTitle'
 
-export interface ActivityEntryDefaultValuesType {
+export interface DefaultActivityEntryValuesType {
   activityTitle: ActivityTitleType | ''
   durationRating: string
   intensityRating: string

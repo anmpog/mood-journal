@@ -1,16 +1,18 @@
 import { activityLogTitleEnum } from '@/enums/activityLogTitleEnum'
 import { z } from 'zod'
-import { activityDurationScaleUISchema } from './activityDurationScaleSchema'
-import { intensityScaleUISchema } from './intensityScaleSchema'
-import { qualitativeScaleUISchema } from './qualitativeScaleSchema'
-import { quantitativeScaleUISchema } from './quantitativeScaleSchema'
+import { activityDurationScale } from '../scales/activityDurationScale'
+import { intensityScale } from '../scales/intensityScale'
+import { qualitativeScale } from '../scales/qualitativeScale'
+import {
+  quantitativeScale
+} from '../scales/quantitativeScale'
 
 export const activityEntrySchema = z.object({
   activityTitle: activityLogTitleEnum,
-  durationRating: activityDurationScaleUISchema,
-  intensityRating: intensityScaleUISchema,
-  qualitativeRating: qualitativeScaleUISchema,
-  quantitativeRating: quantitativeScaleUISchema,
+  durationRating: activityDurationScale,
+  intensityRating: intensityScale,
+  qualitativeRating: qualitativeScale,
+  quantitativeRating: quantitativeScale,
 })
 
 export const journalEntryInputSchema = z.object({

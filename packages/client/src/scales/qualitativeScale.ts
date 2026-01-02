@@ -1,7 +1,7 @@
 // Not sure the best way to make this value track the values expected by the
 // server.
 
-export const qualitativeScaleUISchema = [
+export const qualitativeScale = [
   {
     value: 1,
     key: 'very_negative',

@@ -10,7 +10,7 @@
 // 9 — Amazing
 // 10 — Incredible
 
-export const moodRatingScaleSchema = [
+export const moodRatingScale = [
   {
     value: 1,
     label: 'Terrible',
