@@ -5737,6 +5737,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^5.1.6":
+  version: 5.1.6
+  resolution: "nanoid@npm:5.1.6"
+  bin:
+    nanoid: bin/nanoid.js
+  checksum: 10c0/27b5b055ad8332cf4f0f9f6e2a494aa7e5ded89df4cab8c8490d4eabefe72c4423971d2745d22002868b1d50576a5e42b7b05214733b19f576382323282dd26e
+  languageName: node
+  linkType: hard
+
 "natural-compare@npm:^1.4.0":
   version: 1.4.0
   resolution: "natural-compare@npm:1.4.0"
@@ -6292,6 +6301,7 @@ __metadata:
     jwt-decode: "npm:^4.0.0"
     lodash.startcase: "npm:^4.4.0"
     lucide-react: "npm:^0.556.0"
+    nanoid: "npm:^5.1.6"
     react: "npm:^19.1.0"
     react-dom: "npm:^19.1.0"
     shadcn: "npm:^3.4.2"
