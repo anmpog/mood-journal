@@ -1,17 +1,13 @@
 // import { Button } from '@/components/ui/button'
 import { useAuthedUserData } from '@/auth/useAuth'
 import useCreateJournalEntry from '@/mutations/useCreateJournalEntry'
-import { moodRatingScaleSchema } from '@/schemas/moodRatingScaleSchema'
-import { sleepDurationScaleSchema } from '@/schemas/sleepDurationScaleSchema'
-import { sleepQualityScaleSchema } from '@/schemas/sleepQualityScaleSchema'
-import { stressRatingScaleSchema } from '@/schemas/stressRatingScaleSchema'
-import { JournalEntryDefaultValuesType } from '@/types/JournalEntryDefaultValues'
+import { DefaultJournalEntryValuesType } from '@/types/DefaultJournalEntryValues'
 import { Form, FormikProvider, useFormik } from 'formik'
 import { ActivityEntrySubform } from './ActivityEntrySubform'
-import SelectField from './form/SelectField'
+import { MoodEntrySubform } from './MoodEntrySubform'
 import { Button } from './ui/button'
 
-const defaultJournalEntryValues: JournalEntryDefaultValuesType = {
+const defaultJournalEntryValues: DefaultJournalEntryValuesType = {
   moodRating: '',
   stressRating: '',
   sleepDuration: '',
@@ -21,62 +17,54 @@ const defaultJournalEntryValues: JournalEntryDefaultValuesType = {
 
 export default function CreateJournalEntry() {
   const authedUserData = useAuthedUserData()
+  const { mutate: createJournalEntry } = useCreateJournalEntry()
 
   if (!authedUserData) {
     throw new Error('No authenticated user.')
   }
 
-  const { mutate: createJournalEntry } = useCreateJournalEntry()
-
-  const formik = useFormik<JournalEntryDefaultValuesType>({
+  const journalEntryForm = useFormik<DefaultJournalEntryValuesType>({
     initialValues: {
       ...defaultJournalEntryValues,
     },
-    onSubmit: async (values) => {
-      const formattedJournalEntry = {
-        userId: authedUserData.userId,
-        ...formik.values,
-      }
-      alert(JSON.stringify(values, null, 2))
-      await createJournalEntry(formattedJournalEntry)
+    onSubmit: (values) => {
+      // simulating long submit
+      setTimeout(async () => {
+        const formattedJournalEntry = {
+          userId: authedUserData.userId,
+          ...values,
+        }
+        alert(JSON.stringify(values, null, 2))
+
+        await createJournalEntry(formattedJournalEntry)
+
+        handleFormReset()
+      }, 5000)
     },
   })
+
+  const disableSubmitButton =
+    journalEntryForm.isSubmitting && !journalEntryForm.isValidating
+
+  const handleFormReset = () => {
+    journalEntryForm.resetForm()
+  }
 
   return (
     <>
       <h2>Create A Journal Entry</h2>
-      <div>
-        <FormikProvider value={formik}>
-          <Form>
-            <SelectField
-              name='moodRating'
-              label='Mood Rating'
-              placeholderText='Select a Mood Rating'
-              optionsArr={moodRatingScaleSchema}
-            />
-            <SelectField
-              name='stressRating'
-              label='Stress Rating'
-              placeholderText='Select a Stress Rating'
-              optionsArr={stressRatingScaleSchema}
-            />
-            <SelectField
-              name='sleepDuration'
-              label='Sleep Duration'
-              placeholderText='Select a Sleep Duration'
-              optionsArr={sleepDurationScaleSchema}
-            />
-            <SelectField
-              name='sleepQuality'
-              label='Sleep Quality'
-              placeholderText='Select a Sleep Quality'
-              optionsArr={sleepQualityScaleSchema}
-            />
-            <ActivityEntrySubform />
-            <Button type='submit'>Record Journal Entry</Button>
-          </Form>
-        </FormikProvider>
-      </div>
+      <FormikProvider value={journalEntryForm}>
+        <Form>
+          <MoodEntrySubform />
+          <ActivityEntrySubform />
+          <Button type='submit' disabled={disableSubmitButton}>
+            Record Journal Entry
+          </Button>
+          <Button type='reset' variant='destructive'>
+            Reset Journal Entry
+          </Button>
+        </Form>
+      </FormikProvider>
     </>
   )
 }
