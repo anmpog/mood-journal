@@ -52,3 +52,24 @@ export default tseslint.config({
   },
 })
 ```
+
+## Scales
+
+Scales should describe a range of some sort, and should be ordered such that
+lower values should represent "less" and higher values should represent "more"
+of whatever said scale is attempting to represent. Words should map to
+numerical values. The lowest numerical value associated with a descriptive word
+should be "1". So for example, a scale might be:
+
+```ts
+[
+  { descriptor: 'A little', value: 1 },
+  { descriptor: 'Some', value: 2 },
+  { descriptor: 'A Lot', value: 3 },
+]
+```
+
+## Schemas
+
+On the client, schema will refer to a Zod schema used specifically for
+client-side validation.
