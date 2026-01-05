@@ -62,7 +62,7 @@ numerical values. The lowest numerical value associated with a descriptive word
 should be "1". So for example, a scale might be:
 
 ```ts
-[
+;[
   { descriptor: 'A little', value: 1 },
   { descriptor: 'Some', value: 2 },
   { descriptor: 'A Lot', value: 3 },
@@ -73,3 +73,11 @@ should be "1". So for example, a scale might be:
 
 On the client, schema will refer to a Zod schema used specifically for
 client-side validation.
+
+## Formik Use
+
+THe way that I'm using Formik in this case is a bit weird. I wanted to be able to create "subforms" that I could compose into one form. Doing so takes some finagling. I'm notating here so I don't completely forget my own approach to this. This pattern is not detailed in the Formik documentation.
+
+To me, a "subform" represents a piece of UI that I want to control its own state, and then deliver that state to some parent to represent a value on the parent's state. My first use case was an "Add an Activity" feature that allows a user to add various activities to a Journal Entry. The Activity entries on the Journal Entry are optional, and as such the UI for adding an activity entry is not immediately visible to the user. Instead, the Activity entries are added to the Journal Entry via a dialog/modal. The modal behaves as a form, except that on "submission" of the form, the state of the modal is pushed up to the parent state.
+
+As of writing this, I encapsulated the logic for doing this in a hook that is very specific to this particular use case. The hook in question (`useJournalActivities`) instantiates a Formik instance so that I have the ease of using controlled components in the modal that collects the information about an activity entry. The hook also accesses the parent form's context via the `useFormikContext` hook. This implies that the parent UI explicitly (or implicitly) provides a context for the child component to access. It is via the `useFormikContext` hook that I'm able to access and modify the state of the parent form via the provided helpers.
