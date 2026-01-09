@@ -1,6 +1,6 @@
-import { type AuthContextType } from '@/auth/useAuth'
 import Logo from '@/components/Logo'
 import { Navigation } from '@/components/Navigation'
+import { AuthContext } from '@/types/AuthContext'
 import type { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { createRootRouteWithContext, Outlet } from '@tanstack/react-router'
@@ -9,7 +9,7 @@ import type { TRPCOptionsProxy } from '@trpc/tanstack-react-query'
 import type { AppRouter } from 'trpc-server/src/router'
 
 export interface RouterContext {
-  auth: AuthContextType
+  auth: AuthContext
   queryClient: QueryClient
   trpc: TRPCOptionsProxy<AppRouter>
 }
