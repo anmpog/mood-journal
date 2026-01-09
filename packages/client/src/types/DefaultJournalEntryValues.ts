@@ -1,9 +1,9 @@
-import { ClientActivityEntryType } from './ClientActivityEntry'
+import { ClientActivityEntry } from './ClientActivityEntry'
 
-export interface DefaultJournalEntryValuesType {
+export interface DefaultJournalEntryValues {
   moodRating: string
   stressRating: string
   sleepDuration: string
   sleepQuality: string
-  activities: ClientActivityEntryType[]
+  activities: ClientActivityEntry[]
 }

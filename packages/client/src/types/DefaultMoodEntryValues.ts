@@ -1,4 +1,4 @@
-export interface DefaultMoodEntryValuesType {
+export interface DefaultMoodEntryValues {
   moodRating: string
   stressRating: string
   sleepDuration: string

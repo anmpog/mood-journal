@@ -1,6 +1,5 @@
-import { DefaultActivityEntryValuesType } from './DefaultActivityEntryValues'
+import { DefaultActivityEntryValues } from './DefaultActivityEntryValues'
 
-export interface ClientActivityEntryType
-  extends DefaultActivityEntryValuesType {
+export interface ClientActivityEntry extends DefaultActivityEntryValues {
   activityId: string
 }
