@@ -1,91 +1,66 @@
-import type { CreateUserInput } from '@/mutations/useCreateUser'
-import useCreateUser from '@/mutations/useCreateUser'
-import { useState, type ChangeEvent } from 'react'
+import useCreateUser, { CreateUserInput } from '@/mutations/useCreateUser'
+import { Form, FormikProvider, useFormik } from 'formik'
+import TextField from '../form/TextField'
 import { Button } from '../ui/button'
-import { Input } from '../ui/input'
+
+const defaultCreateUserValues: CreateUserInput = {
+  firstName: '',
+  lastName: '',
+  email: '',
+  password: '',
+}
 
 export default function CreateUser() {
-  const initialFormState = {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-  }
-  const [formState, setFormState] = useState<CreateUserInput>(initialFormState)
+  const { mutate: createUser } = useCreateUser()
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>): void => {
-    const name = event.target.name as keyof typeof formState
-    if (name in formState) {
-      setFormState({
-        ...formState,
-        [name]: event.target.value,
-      })
-    }
-  }
-
-  const { mutate: createUserMutation } = useCreateUser()
-
-  const handleFormReset = (): void => {
-    setFormState(initialFormState)
-  }
+  const createUserForm = useFormik({
+    initialValues: defaultCreateUserValues,
+    onSubmit: async (values) => {
+      alert(JSON.stringify(values, null, 2))
+      try {
+        await createUser({ ...values })
+      } catch (error) {
+        if (error instanceof Error) {
+          console.error(error.message)
+        } else {
+          throw new Error('There was an error creating a user.')
+        }
+      }
+    },
+  })
 
   return (
-    <div className='outline-1 outline-red-500'>
+    <FormikProvider value={createUserForm}>
       <h1>Create User</h1>
-      <form
-        onSubmit={(event) => {
-          event.preventDefault()
-          createUserMutation(
-            {
-              ...formState,
-            },
-            {
-              onSuccess: handleFormReset,
-            }
-          )
-        }}
-        className='flex flex-col '
-      >
-        <label htmlFor='firstName'>First Name:</label>
-        <Input
+      <Form className='flex flex-col '>
+        <TextField
           type='text'
           name='firstName'
-          id='firstName'
-          value={formState['firstName']}
-          onChange={handleChange}
-          required
+          label='First Name:'
+          placeholder='First Name'
         />
-        <label htmlFor='lastName'>Last Name:</label>
-        <Input
+        <TextField
           type='text'
           name='lastName'
-          id='lastName'
-          value={formState['lastName']}
-          onChange={handleChange}
-          required
+          label='Last Name:'
+          placeholder='Last Name'
         />
-        <label htmlFor='email'>Email:</label>
-        <Input
+        <TextField
           type='email'
           name='email'
-          id='email'
-          value={formState['email']}
-          onChange={handleChange}
-          required
+          label='Email:'
+          placeholder='example@domain.xyz'
         />
-        <label htmlFor='password'>Password:</label>
-        <Input
+        <TextField
           type='password'
           name='password'
-          id='password'
-          value={formState['password']}
-          onChange={handleChange}
-          required
+          label='Password:'
+          placeholder='Password'
         />
         <Button type='submit' variant={'default'}>
           Create User
         </Button>
-      </form>
-    </div>
+      </Form>
+    </FormikProvider>
   )
 }
