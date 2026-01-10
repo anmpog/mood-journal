@@ -1,30 +1,4 @@
-import type { UserDataFromJwt } from '@/mutations/useLoginUser'
-import { jwtDecode, type JwtPayload } from 'jwt-decode'
-
-export function getUserToken(tokenKey: string = 'userToken'): string | null {
-  return localStorage.getItem(tokenKey)
-}
-
-export function storeUserJwt(
-  token: string | null,
-  tokenKey: string = 'userToken'
-): void {
-  if (token) {
-    localStorage.setItem(tokenKey, token)
-  } else {
-    localStorage.removeItem(tokenKey)
-  }
-}
-
-export function decodeToken(token: string | null): JwtPayload | null {
-  if (token) {
-    const decoded = jwtDecode(token)
-
-    return decoded
-  }
-
-  return null
-}
+import { jwtDecode } from 'jwt-decode'
 
 export function isTokenExpired(token: string | null): boolean {
   if (!token) {
@@ -35,15 +9,4 @@ export function isTokenExpired(token: string | null): boolean {
 
     return Date.now() >= exp * 1000
   }
-}
-
-export function getUserDataFromJwt(token: string): {
-  userId: number
-  email: string
-} {
-  const { userId, email } = jwtDecode<UserDataFromJwt>(token)
-
-  const user = { userId, email }
-
-  return user
 }

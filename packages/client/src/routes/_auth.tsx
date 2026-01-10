@@ -1,32 +1,21 @@
-import { isTokenExpired } from '@/auth/utils'
 import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth')({
   beforeLoad: ({ context }) => {
-    if (
-      // if context isAuthenticated is false OR
-      !context.auth.isAuthenticated ||
-      // if token is expired:
-      isTokenExpired(context.auth?.userToken)
-    ) {
-      context.auth.logout()
+    if (context.auth.isAuthenticated === false) {
       throw redirect({
         to: '/login',
       })
     }
+
+    return { auth: context.auth }
   },
   component: AuthLayout,
-  notFoundComponent: () => (
-    <div>
-      Whoops... that doesn't exist. Either authenticate... or try something
-      else!
-    </div>
-  ),
 })
 
 function AuthLayout() {
   return (
-    <div className='border-2 border-red-500 border-dotted'>
+    <div className='border-2 border-blue-500 border-dotted'>
       <Outlet />
     </div>
   )

@@ -1,53 +1,64 @@
+import type { AuthContext as AuthContextType } from '@/types/AuthContext'
+import { jwtDecode } from 'jwt-decode'
 import { useEffect, useState } from 'react'
 import { AuthContext } from './auth/useAuth'
-import { getUserDataFromJwt, getUserToken, storeUserJwt } from './auth/utils'
-import useLoginUser, {
-  type LoginUserInput,
-  type UserDataFromJwt,
-} from './mutations/useLoginUser'
+import { isTokenExpired } from './auth/utils'
+import useLoginUser, { type LoginUserInput } from './mutations/useLoginUser'
+import type { AuthenticatedUser } from './types/AuthenticatedUser'
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [userToken, setUserToken] = useState<string | null>(getUserToken())
-  // Trying to store user data in derived state so that it updates whenever userToken changes
-  let userData = null
+  const [authenticatedUser, setAuthenticatedUser] =
+    useState<AuthenticatedUser | null>(null)
 
-  if (userToken) {
-    userData = getUserDataFromJwt(userToken)
-  }
-
-  const isAuthenticated = Boolean(userToken)
-  const { mutateAsync } = useLoginUser()
+  const { mutateAsync: loginUser } = useLoginUser()
 
   const logout = (): void => {
-    storeUserJwt(null)
-    setUserToken(null)
+    setAuthenticatedUser(null)
+    localStorage.removeItem('userToken')
   }
 
-  const login = async (
-    mutationInput: LoginUserInput
-  ): Promise<UserDataFromJwt> => {
-    const response = await mutateAsync(mutationInput)
-    if (!response.success) {
-      throw new Error('Login failed: no token returned from server.')
+  const login = async (loginUserInput: LoginUserInput): Promise<void> => {
+    try {
+      const loginResponse = await loginUser(loginUserInput)
+      localStorage.setItem('userToken', loginResponse.data)
+      const authenticatedUser = jwtDecode<AuthenticatedUser>(loginResponse.data)
+      setAuthenticatedUser(authenticatedUser)
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('Error with login: ', error)
+      logout()
     }
-
-    const token = response.data
-
-    storeUserJwt(token)
-    setUserToken(token)
-
-    return getUserDataFromJwt(token)
   }
 
   useEffect(() => {
-    setUserToken(getUserToken())
+    const token = localStorage.getItem('userToken')
+
+    if (isTokenExpired(token)) {
+      logout()
+    }
+
+    if (token) {
+      const userDataFromToken = jwtDecode<AuthenticatedUser>(token)
+      const { email, userId } = userDataFromToken
+      setAuthenticatedUser({ email, userId })
+    }
   }, [])
 
+  const authContext: AuthContextType = authenticatedUser
+    ? {
+        isAuthenticated: true,
+        authenticatedUser: authenticatedUser,
+        login,
+        logout,
+      }
+    : {
+        isAuthenticated: false,
+        authenticatedUser: null,
+        login,
+        logout,
+      }
+
   return (
-    <AuthContext.Provider
-      value={{ isAuthenticated, userToken, userData, login, logout }}
-    >
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authContext}>{children}</AuthContext.Provider>
   )
 }
