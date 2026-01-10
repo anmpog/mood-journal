@@ -1,36 +1,27 @@
-import { useAuthedUserData } from '@/auth/useAuth'
 import CreateJournalEntry from '@/components/CreateJournalEntry'
 import useGetUserProfile from '@/queries/useGetUserProfile'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/_auth/profile')({
   loader: async ({ context: { trpc, queryClient, auth } }) => {
-    if (!auth.userData) {
-      throw new Error('No authenticated user')
-    }
-
-    const currentUserId = auth.userData.userId
-
     await queryClient.ensureQueryData(
       trpc.user.getUserProfile.queryOptions({
-        userId: currentUserId,
+        userId: auth.authenticatedUser.userId,
       })
     )
-    return
   },
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  const { userId } = useAuthedUserData()
-
+  const { auth } = Route.useRouteContext()
   const {
     isLoading,
     isError,
     error,
     isSuccess,
     data: userProfileData,
-  } = useGetUserProfile({ userId })
+  } = useGetUserProfile({ userId: auth.authenticatedUser.userId })
 
   if (isLoading) {
     return <div>Loading...</div>
@@ -47,12 +38,12 @@ function RouteComponent() {
     return (
       <>
         <h2>
-          Welcome back,
+          Welcome back,{' '}
           <span className='capitalize'>
             {firstName} {lastName}
           </span>
         </h2>
-        <CreateJournalEntry />
+        <CreateJournalEntry userId={auth.authenticatedUser.userId} />
       </>
     )
   }
