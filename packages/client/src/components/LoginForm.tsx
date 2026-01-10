@@ -16,7 +16,9 @@ export const LoginForm = () => {
   const navigate = useNavigate({ from: '/login' })
 
   useEffect(() => {
-    navigate({ to: '/profile' })
+    if (auth.isAuthenticated) {
+      navigate({ to: '/profile' })
+    }
   }, [auth.isAuthenticated, navigate])
 
   const loginForm = useFormik({

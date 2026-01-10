@@ -1,13 +1,11 @@
-// import { Button } from '@/components/ui/button'
-import { useAuthedUserData } from '@/auth/useAuth'
 import useCreateJournalEntry from '@/mutations/useCreateJournalEntry'
-import { DefaultJournalEntryValuesType } from '@/types/DefaultJournalEntryValues'
+import { DefaultJournalEntryValues } from '@/types/DefaultJournalEntryValues'
 import { Form, FormikProvider, useFormik } from 'formik'
 import { ActivityEntrySubform } from './ActivityEntrySubform'
 import { MoodEntrySubform } from './MoodEntrySubform'
 import { Button } from './ui/button'
 
-const defaultJournalEntryValues: DefaultJournalEntryValuesType = {
+const defaultJournalEntryValues: DefaultJournalEntryValues = {
   moodRating: '',
   stressRating: '',
   sleepDuration: '',
@@ -15,31 +13,30 @@ const defaultJournalEntryValues: DefaultJournalEntryValuesType = {
   activities: [],
 }
 
-export default function CreateJournalEntry() {
-  const authedUserData = useAuthedUserData()
+interface CreateJournalEntryProps {
+  userId: number
+}
+
+export default function CreateJournalEntry({
+  userId,
+}: CreateJournalEntryProps) {
   const { mutate: createJournalEntry } = useCreateJournalEntry()
 
-  if (!authedUserData) {
-    throw new Error('No authenticated user.')
-  }
-
-  const journalEntryForm = useFormik<DefaultJournalEntryValuesType>({
+  const journalEntryForm = useFormik<DefaultJournalEntryValues>({
     initialValues: {
       ...defaultJournalEntryValues,
     },
-    onSubmit: (values) => {
-      // simulating long submit
-      setTimeout(async () => {
-        const formattedJournalEntry = {
-          userId: authedUserData.userId,
-          ...values,
-        }
-        alert(JSON.stringify(values, null, 2))
+    onSubmit: async (values) => {
+      const formattedJournalEntry = {
+        userId: userId,
+        ...values,
+      }
 
-        await createJournalEntry(formattedJournalEntry)
+      alert(JSON.stringify(values, null, 2))
 
-        handleFormReset()
-      }, 5000)
+      await createJournalEntry(formattedJournalEntry)
+
+      handleFormReset()
     },
   })
 
