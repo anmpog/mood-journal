@@ -33,7 +33,7 @@ const SelectField = ({
         value={field.value}
         onValueChange={(value) => helpers.setValue(value)}
       >
-        <SelectTrigger>
+        <SelectTrigger id={name}>
           <SelectValue placeholder={placeholderText} />
         </SelectTrigger>
         <SelectContent>
