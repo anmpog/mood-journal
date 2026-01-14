@@ -1,12 +1,12 @@
-import { ClientActivityEntryType } from '@/types/ClientActivityEntry'
-import { DefaultActivityEntryValuesType } from '@/types/DefaultActivityEntryValues'
-import { DefaultJournalEntryValuesType } from '@/types/DefaultJournalEntryValues'
+import { ClientActivityEntry } from '@/types/ClientActivityEntry'
+import { DefaultActivityEntryValues } from '@/types/DefaultActivityEntryValues'
+import { DefaultJournalEntryValues } from '@/types/DefaultJournalEntryValues'
 import addValueToArray from '@/utils/addValueToArray'
 import filterValueFromArray from '@/utils/filterValueFromArray'
 import { useFormik, useFormikContext } from 'formik'
 
 function useJournalActivities(
-  defaultActivityEntryFormValues: DefaultActivityEntryValuesType
+  defaultActivityEntryFormValues: DefaultActivityEntryValues,
 ) {
   const activityEntriesForm = useFormik({
     initialValues: defaultActivityEntryFormValues,
@@ -18,9 +18,9 @@ function useJournalActivities(
     values: { activities },
     initialValues: { activities: activitiesInitialValues },
     setFieldValue,
-  } = useFormikContext<DefaultJournalEntryValuesType>()
+  } = useFormikContext<DefaultJournalEntryValues>()
 
-  const handleAddActivityEntry = (value: ClientActivityEntryType) => {
+  const handleAddActivityEntry = (value: ClientActivityEntry) => {
     setFieldValue('activities', addValueToArray(activities, value))
   }
 
