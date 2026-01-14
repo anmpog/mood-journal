@@ -1,1 +1,2 @@
 # Automatically ignores files specified by .gitignore
+src/components/ui/**
