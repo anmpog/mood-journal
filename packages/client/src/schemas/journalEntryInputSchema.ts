@@ -3,9 +3,7 @@ import { z } from 'zod'
 import { activityDurationScale } from '../scales/activityDurationScale'
 import { intensityScale } from '../scales/intensityScale'
 import { qualitativeScale } from '../scales/qualitativeScale'
-import {
-  quantitativeScale
-} from '../scales/quantitativeScale'
+import { quantitativeScale } from '../scales/quantitativeScale'
 
 export const activityEntrySchema = z.object({
   activityTitle: activityLogTitleEnum,

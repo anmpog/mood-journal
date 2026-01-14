@@ -27,12 +27,12 @@ export const CreatedActivityEntry = ({
     quantitativeRating,
   } = activity
   return (
-    <Card className='basis-1/3 relative'>
+    <Card className='relative basis-1/3'>
       <Button
         type='button'
         variant='ghost'
         size='icon-sm'
-        className='rounded-full absolute top-2 right-2'
+        className='absolute top-2 right-2 rounded-full'
         onClick={() => handleRemoveActivity(activityId)}
       >
         <X />

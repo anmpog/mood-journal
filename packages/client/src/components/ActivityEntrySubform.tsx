@@ -88,7 +88,7 @@ export const ActivityEntrySubform = () => {
         open={activityDialogOpen}
         onOpenChange={handleToggleActivityDialog}
       >
-        <div className='flex gap-2 mt-5'>
+        <div className='mt-5 flex gap-2'>
           <DialogTrigger asChild>
             <Button variant='outline'>Add Activity</Button>
           </DialogTrigger>
@@ -140,12 +140,12 @@ export const ActivityEntrySubform = () => {
               placeholderText='Select a Quantity'
               optionsArr={quantitativeScale}
             />
-            <div className='flex gap-2 mt-5 justify-end'>
+            <div className='mt-5 flex justify-end gap-2'>
               <Button
                 type='button'
                 onClick={() => {
                   handleAddActivityEntry(
-                    createActivityWithId(activityEntriesForm.values)
+                    createActivityWithId(activityEntriesForm.values),
                   )
                   handleResetActivityEntryForm()
                   handleCloseActivityDialog()

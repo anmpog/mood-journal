@@ -1,5 +1,5 @@
 // Chat GPT generated list:
-// 1 — Terrible 
+// 1 — Terrible
 // 2 — Very poor
 // 3 — Poor
 // 4 — Restless
@@ -9,7 +9,6 @@
 // 8 — Very good
 // 9 — Excellent
 // 10 — Perfect
-
 
 export const sleepQualityScale = [
   {

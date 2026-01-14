@@ -5,6 +5,7 @@ import { Form, FormikProvider, useFormik } from 'formik'
 import { useEffect } from 'react'
 import TextField from './form/TextField'
 import { Button } from './ui/button'
+import { Card, CardAction, CardContent, CardTitle } from './ui/card'
 
 const defaultLoginFormValues: LoginUserInput = {
   email: '',
@@ -38,24 +39,31 @@ export const LoginForm = () => {
   })
 
   return (
-    <FormikProvider value={loginForm}>
-      <Form>
-        <TextField
-          type='email'
-          name='email'
-          placeholder='example@abc.xyz'
-          label='Email Address'
-        />
-        <TextField
-          type='password'
-          name='password'
-          placeholder='Password'
-          label='Password'
-        />
-        <Button type='submit' variant='default'>
-          Login
-        </Button>
-      </Form>
-    </FormikProvider>
+    <Card className='mx-auto w-full max-w-2xl'>
+      <CardTitle className='text-center'>Login To Mood Journal</CardTitle>
+      <FormikProvider value={loginForm}>
+        <CardContent>
+          <Form className='flex flex-col gap-6'>
+            <TextField
+              type='email'
+              name='email'
+              placeholder='example@abc.xyz'
+              label='Email Address'
+            />
+            <TextField
+              type='password'
+              name='password'
+              placeholder='Password'
+              label='Password'
+            />
+            <CardAction className='w-full'>
+              <Button type='submit' variant='default' className='w-full'>
+                Login
+              </Button>
+            </CardAction>
+          </Form>
+        </CardContent>
+      </FormikProvider>
+    </Card>
   )
 }

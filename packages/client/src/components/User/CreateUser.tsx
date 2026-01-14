@@ -32,7 +32,7 @@ export default function CreateUser() {
   return (
     <FormikProvider value={createUserForm}>
       <h1>Create User</h1>
-      <Form className='flex flex-col '>
+      <Form className='flex flex-col'>
         <TextField
           type='text'
           name='firstName'

@@ -18,35 +18,35 @@ export function Navigation() {
   }
   return (
     <nav>
-      <ul className='flex py-4 gap-3 justify-center items-center'>
-        <li className='h-full flex justify-center items-center'>
+      <ul className='flex items-center justify-center gap-3 py-4'>
+        <li className='flex h-full items-center justify-center'>
           <Link
             to='/'
             activeProps={activeProps}
-            className='h-full flex justify-center items-center'
+            className='flex h-full items-center justify-center'
           >
             Home
           </Link>
         </li>
-        <li className='h-full flex justify-center items-center'>
+        <li className='flex h-full items-center justify-center'>
           <Link
             to='/profile'
             activeProps={activeProps}
             disabled={!auth.isAuthenticated}
-            className='h-full flex justify-center items-center'
+            className='flex h-full items-center justify-center'
           >
             Profile
           </Link>
         </li>
-        <div className='border-l-2 border-blue-600 flex gap-3 px-4'>
-          <li className='h-full flex justify-center items-center'>
+        <div className='flex gap-3 border-l-2 border-blue-600 px-4'>
+          <li className='flex h-full items-center justify-center'>
             <Button asChild variant={'outline'}>
               <Link to='/login' activeProps={activeProps} className='button'>
                 Login
               </Link>
             </Button>
           </li>
-          <li className='h-full flex justify-center items-center'>
+          <li className='flex h-full items-center justify-center'>
             <Button
               onClick={handleLogout}
               variant='destructive'

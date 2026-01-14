@@ -16,12 +16,12 @@ export interface RouterContext {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   component: () => (
-    <div className='border-2 border-red-500 max-w-6xl mx-auto flex flex-col min-h-screen'>
-      <header className='flex justify-between mb-6'>
+    <div className='mx-auto flex min-h-screen max-w-6xl flex-col border-2 border-red-500'>
+      <header className='mb-6 flex justify-between'>
         <Logo />
         <Navigation />
       </header>
-      <main className='flex flex-col grow'>
+      <main className='flex grow flex-col'>
         <Outlet />
       </main>
       <footer>Footer Content here</footer>

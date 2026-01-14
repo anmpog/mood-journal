@@ -13,7 +13,7 @@ export const getUserProfileQueryKey = trpc.user.getUserProfile.queryKey()
 export default function useGetUserProfile(queryInput: GetUserProfileInput) {
   const getUserProfileQueryOptions = trpc.user.getUserProfile.queryOptions(
     queryInput,
-    {}
+    {},
   )
 
   return useQuery(getUserProfileQueryOptions)
