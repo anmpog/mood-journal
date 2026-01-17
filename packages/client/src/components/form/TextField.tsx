@@ -1,6 +1,6 @@
 import { useField } from 'formik'
+import { Field, FieldLabel } from '../ui/field'
 import { Input } from '../ui/input'
-import { Label } from '../ui/label'
 
 interface TextFieldProps {
   name: string
@@ -19,8 +19,8 @@ const TextField = ({
   const [field, _, helpers] = useField(name)
 
   return (
-    <>
-      <Label htmlFor={name}>{label}</Label>
+    <Field orientation={'responsive'}>
+      <FieldLabel htmlFor={name}>{label}</FieldLabel>
       <Input
         type={type}
         name={name}
@@ -29,7 +29,7 @@ const TextField = ({
         value={field.value}
         onChange={(event) => helpers.setValue(event.target.value)}
       />
-    </>
+    </Field>
   )
 }
 
