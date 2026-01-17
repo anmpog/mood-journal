@@ -1,5 +1,6 @@
 import { TRPCError } from '@trpc/server'
 import { argon2id, hash, verify } from 'argon2'
+import listUserJournalEntries from 'src/services/listUserJournalEntries'
 import { z } from 'zod'
 import { authedProcedure, publicProcedure, router } from '../trpc'
 import { signJwt } from '../utils/jwt'
@@ -138,23 +139,34 @@ export const UserRouter = router({
     .query(async ({ input, ctx }) => {
       const { userId } = input
 
+      listUserJournalEntries({
+        prisma: ctx.prisma,
+        userId: userId,
+        limit: 4,
+      })
+
       const user = await ctx.prisma.user.findUnique({
         where: { id: userId },
-        include: {
-          journalEntries: {
-            include: {
-              activities: true,
-            },
-          },
-        },
+      })
+
+      const { userRecentEntries, totalEntries } = await listUserJournalEntries({
+        prisma: ctx.prisma,
+        userId: userId,
+        limit: 4,
       })
 
       if (!user) {
         throw new TRPCError({ code: 'NOT_FOUND' })
       }
 
-      const { firstName, lastName, journalEntries } = user
+      const { firstName, lastName, id } = user
 
-      return Success({ firstName, lastName, journalEntries })
+      return Success({
+        firstName,
+        lastName,
+        id,
+        userRecentEntries,
+        totalEntries,
+      })
     }),
 })

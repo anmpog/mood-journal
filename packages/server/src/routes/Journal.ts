@@ -1,4 +1,4 @@
-import { JournalEntrySchema } from 'src/schemas/journal/jounralEntry.schema'
+import { JournalEntrySchema } from 'src/schemas/journal/journalEntry.schema'
 import { authedProcedure, router } from '../trpc'
 
 export const JournalRouter = router({
@@ -47,3 +47,4 @@ export const JournalRouter = router({
       return journalEntry
     }),
 })
+
